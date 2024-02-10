@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import { DataContext } from "./DataProvider";
+import { GameContext } from "./GameProvider";
 export function DummyChild() {
-  const data = useContext(DataContext);
-  return <button onClick={data.toggleText}>{data.text}</button>;
+  const data = useContext(GameContext);
+  return <button onClick={data.handleSetDeck}>setDeck</button>;
 }
