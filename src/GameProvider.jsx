@@ -1,6 +1,5 @@
 import { createContext, useEffect, useRef, useState } from "react";
 import { loadDeck } from "./loadDeck";
-import { drawCard } from "./drawCardIntoRef";
 
 const p1 = "player1";
 const p2 = "player2";
@@ -9,24 +8,29 @@ const discards = "discards";
 export const GameContext = createContext(null);
 
 export function GameProvider({ children }) {
-  const [text, settext] = useState("text1");
-  const idRef = useRef(null);
-  const drawnCardRef = useRef(null);
   const [deck, setDeck] = useState(null);
-  //placeholder for card drawn
   const [loaded, setloaded] = useState(false);
-  const [drawnCard, setDrawnCard] = useState(null);
-  const cardDestRef = useRef(discards);
+  const [discardPile, setDiscardPile] = useState([]);
+  const [p1Pile, setP1Pile] = useState([]);
+  const [p2Pile, setP2Pile] = useState([]);
+  const deckCountRef = useRef(null);
+  const deckRef = useRef(null);
+  deckCountRef.current = 1;
 
-  const handleSetDeck = () => {
-    loadDeck(setDeck);
-  };
+  useEffect(() => {
+    loadDeck(deckCountRef, setDeck);
+  }, []);
+
+  useEffect(() => {
+    if (deck) {
+      setloaded(true);
+      deckRef.current = [...deck];
+    }
+  }, [deck]);
 
   const handleDrawFromDeck = () => {};
   const game = {
     loaded,
-    handleDrawFromDeck,
-    handleSetDeck,
   };
   return <GameContext.Provider value={game}>{children}</GameContext.Provider>;
 }
