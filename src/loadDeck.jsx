@@ -5,7 +5,7 @@ async function validate(deck) {
   return await data;
 }
 
-export async function loadDeck(setDeckId) {
+export async function loadDeck(ref) {
   let deck = localStorage.getItem("deck");
   let data = await validate(deck);
   if (deck === null || !data.success) {
@@ -16,5 +16,5 @@ export async function loadDeck(setDeckId) {
     deck = data.deck_id;
     localStorage.setItem("deck", deck);
   }
-  setDeckId(deck);
+  ref.current = deck;
 }
