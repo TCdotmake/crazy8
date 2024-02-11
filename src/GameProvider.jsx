@@ -96,6 +96,30 @@ export function GameProvider({ children }) {
     setP2Pile([]);
     console.log(deckRef.current.length);
   }
+  function playCard(key, player, setFn) {
+    //get index
+    let index = -1;
+    for (let i = 0; i < player.length; i++) {
+      if (player[i].key === key) {
+        index = i;
+        break;
+      }
+    }
+    if (index != -1) {
+      let copy = structuredClone(player);
+      let card = copy.splice(index, 1);
+      setFn([...copy]);
+      setDiscardPile((prev) => {
+        return [...prev, ...card];
+      });
+    }
+  }
+  function p1PlayCard(key) {
+    playCard(key, p1Pile, setP1Pile);
+  }
+  function p2PlayCard(key) {
+    playCard(key, p2Pile, setP2Pile);
+  }
   // Context variables
   const game = {
     loaded,
@@ -108,6 +132,8 @@ export function GameProvider({ children }) {
     dealToP2,
     resetGame,
     newGame,
+    p1PlayCard,
+    p2PlayCard,
   };
 
   return <GameContext.Provider value={game}>{children}</GameContext.Provider>;

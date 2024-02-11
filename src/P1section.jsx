@@ -12,6 +12,11 @@ export function P1section() {
   const onClick = () => {
     game.dealToP1(1);
   };
+  const handlePlay = (e) => {
+    const key = e.target.dataset.key;
+    //to do need to verify if move is valid
+    game.p1PlayCard(key);
+  };
   return (
     <div>
       <h1>P1</h1>
@@ -20,9 +25,16 @@ export function P1section() {
         {pile.length > 0 &&
           pile.map((n) => {
             let alt = n.value + " of " + n.suit;
-
             return (
-              <img css={style} key={n.key + "p1"} src={n.image} alt={alt}></img>
+              <button onClick={handlePlay} key={n.key + "btn"} data-key={n.key}>
+                <img
+                  css={style}
+                  key={n.key + "p1"}
+                  src={n.image}
+                  alt={alt}
+                  data-key={n.key}
+                ></img>
+              </button>
             );
           })}
       </div>
