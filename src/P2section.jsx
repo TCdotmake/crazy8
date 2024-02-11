@@ -13,8 +13,10 @@ export function P2section() {
     game.dealToP2(1);
   };
   const handlePlay = (e) => {
-    const key = e.target.dataset.key;
-    game.p2PlayCard(key);
+    if (!game.playerTurn) {
+      const key = e.target.dataset.key;
+      game.p2PlayCard(key);
+    }
   };
   return (
     <div>

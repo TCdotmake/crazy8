@@ -13,9 +13,11 @@ export function P1section() {
     game.dealToP1(1);
   };
   const handlePlay = (e) => {
-    const key = e.target.dataset.key;
-    //to do need to verify if move is valid
-    game.p1PlayCard(key);
+    if (game.playerTurn) {
+      const key = e.target.dataset.key;
+      //to do need to verify if move is valid
+      game.p1PlayCard(key);
+    }
   };
   return (
     <div>

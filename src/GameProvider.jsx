@@ -15,6 +15,7 @@ export function GameProvider({ children }) {
   const [discardPile, setDiscardPile] = useState([]);
   const [p1Pile, setP1Pile] = useState([]);
   const [p2Pile, setP2Pile] = useState([]);
+  const [playerTurn, setPlayerTurn] = useState(true);
   // END STATES
 
   // REFS
@@ -82,6 +83,7 @@ export function GameProvider({ children }) {
     dealToP1(7);
     dealToP2(7);
     dealToDiscard(1);
+    setPlayerTurn(true);
     console.log(deckRef.current.length);
   }
   function resetGame() {
@@ -116,9 +118,11 @@ export function GameProvider({ children }) {
   }
   function p1PlayCard(key) {
     playCard(key, p1Pile, setP1Pile);
+    setPlayerTurn(false);
   }
   function p2PlayCard(key) {
     playCard(key, p2Pile, setP2Pile);
+    setPlayerTurn(true);
   }
   // Context variables
   const game = {
@@ -134,6 +138,7 @@ export function GameProvider({ children }) {
     newGame,
     p1PlayCard,
     p2PlayCard,
+    playerTurn,
   };
 
   return <GameContext.Provider value={game}>{children}</GameContext.Provider>;
