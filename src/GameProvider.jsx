@@ -1,7 +1,7 @@
 import { createContext, useEffect, useRef, useState } from "react";
 import { loadDeck } from "./loadDeck";
 import { v4 as uuid } from "uuid";
-import { dealCards } from "./dealCards";
+import _ from "lodash";
 const p1 = "player1";
 const p2 = "player2";
 const discards = "discards";
@@ -43,15 +43,30 @@ export function GameProvider({ children }) {
   function dealCards(numOfCards, setFn) {
     if (numOfCards > deckRef.current.length) {
       // need to handle shuffling discards back into deck
+      let copy = structuredClone(discardPile);
+      let topCard = copy.pop();
+      copy = [...copy, ...structuredClone(deckRef.current)];
+      copy = _.shuffle(copy);
+      setDiscardPile([topCard]);
+      deckRef.current = [...copy];
 
-      //placeholder behavior
-      return false;
+      if (numOfCards > deckRef.current.length) {
+        return false;
+      } else {
+        executeDraw();
+        return true;
+      }
     } else {
+      executeDraw();
+      return true;
+    }
+
+    function executeDraw() {
       let drawnCards = deckRef.current.splice(0, numOfCards);
       setFn((prev) => {
         return [...prev, ...drawnCards];
       });
-      return true;
+      console.log(deckRef.current.length);
     }
   }
 

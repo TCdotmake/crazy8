@@ -1,12 +1,11 @@
 import { useContext } from "react";
-import { dealCards } from "./dealCards";
 import { GameContext } from "./GameProvider";
 
 export function Discards() {
   const game = useContext(GameContext);
   const pile = game.discardPile;
   const onClick = () => {
-    game.dealToDiscard();
+    game.dealToDiscard(7);
   };
   return (
     <div>
