@@ -5,7 +5,14 @@ import _ from "lodash";
 const p1 = "player1";
 const p2 = "player2";
 const discards = "discards";
-const WILD = "wild";
+const PASSED = 1;
+const WILD = 2;
+const FAILED = 3;
+const ANY = "any";
+const CLUBS = "CLUBS";
+const DIAMONDS = "DIAMONDS";
+const HEARTS = "HEARTS";
+const SPADES = "SPADES";
 
 export const GameContext = createContext(null);
 
@@ -17,6 +24,7 @@ export function GameProvider({ children }) {
   const [p1Pile, setP1Pile] = useState([]);
   const [p2Pile, setP2Pile] = useState([]);
   const [playerTurn, setPlayerTurn] = useState(true);
+  const [solution, setSolution] = useState([]);
   // END STATES
 
   // REFS
@@ -44,6 +52,40 @@ export function GameProvider({ children }) {
       setloaded(true);
     }
   }, [deck]);
+
+  //run createSolution at least once when turn changes
+  useEffect(() => {
+    if (playerTurn) {
+      setSolution([]);
+    }
+    if (!playerTurn) {
+      setSolution([...createSolution()]);
+    }
+  }, [playerTurn]);
+
+  useEffect(() => {
+    console.log(solution);
+    if (!playerTurn) {
+      if (solution.length >= 1) {
+        p2PlayCard(solution[0].key);
+      } else {
+        dealToP2(1);
+      }
+    }
+  }, [solution]);
+
+  useEffect(() => {
+    if (!playerTurn) {
+      setSolution([...createSolution()]);
+    }
+  }, [p2Pile]);
+
+  // useEffect(() => {
+  //   if (!playerTurn) {
+  //     setSolution([...createSolution()]);
+  //   }
+  // }, [playerTurn, p2Pile]);
+
   // END useEffect hooks
 
   // helper functions
@@ -144,7 +186,7 @@ export function GameProvider({ children }) {
   function p1PlayCard(key) {
     let card = getCard(key, p1Pile);
     let result = validatePlay(card);
-    if (result) {
+    if (result != FAILED) {
       playCard(key, p1Pile, setP1Pile);
       setPlayerTurn(false);
       if (result == WILD) {
@@ -156,7 +198,7 @@ export function GameProvider({ children }) {
   function p2PlayCard(key) {
     let card = getCard(key, p2Pile);
     let result = validatePlay(card);
-    if (result) {
+    if (result != FAILED) {
       playCard(key, p2Pile, setP2Pile);
       setPlayerTurn(true);
       if (result == WILD) {
@@ -167,15 +209,26 @@ export function GameProvider({ children }) {
   }
   function validatePlay(card) {
     if (card.suit == validCondition.suit) {
-      return true;
-    } else if (card.value == validCondition.value) {
-      return true;
+      return PASSED;
+    } else if (
+      validCondition.value == ANY ||
+      card.value == validCondition.value
+    ) {
+      return PASSED;
     } else if (card.value == validCondition.wild) {
       return WILD;
     } else {
-      return false;
+      return FAILED;
     }
   }
+
+  function CPUaction() {
+    console.log("Entered CPU action");
+    setSolution([...arr]);
+
+    // p2PlayCard(solution[0].key);
+  }
+
   // Context variables
   const game = {
     loaded,
@@ -196,4 +249,36 @@ export function GameProvider({ children }) {
   };
 
   return <GameContext.Provider value={game}>{children}</GameContext.Provider>;
+
+  function createSolution() {
+    let copy = structuredClone(p2Pile);
+    let cardsObj = {
+      [CLUBS]: { cards: [] },
+      [DIAMONDS]: { cards: [] },
+      [HEARTS]: { cards: [] },
+      [SPADES]: { cards: [] },
+    };
+    copy.map((card) => {
+      card.result = validatePlay(card);
+      cardsObj[`${card.suit}`].cards.push(card);
+    });
+
+    copy = [];
+    _.forEach(cardsObj, (n) => {
+      n.cards = _.sortBy(n.cards, ["result"]);
+      copy.push(n.cards);
+    });
+    copy.sort(function (a, b) {
+      return b.length - a.length;
+    });
+
+    let sortedArr = [];
+    _.forEach(copy, (n) => {
+      sortedArr = [...sortedArr, ...n];
+    });
+
+    sortedArr = sortedArr.filter((n) => n.result != FAILED);
+
+    return sortedArr;
+  }
 }
