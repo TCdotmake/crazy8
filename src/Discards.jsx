@@ -1,3 +1,22 @@
+import { useContext } from "react";
+import { dealCards } from "./dealCards";
+import { GameContext } from "./GameProvider";
+
 export function Discards() {
-  return <div></div>;
+  const game = useContext(GameContext);
+  const pile = game.discardPile;
+  const onClick = () => {
+    game.dealToDiscard();
+  };
+  return (
+    <div>
+      <button onClick={onClick}>Deal one card to Discard</button>
+      <div>
+        {pile.length > 0 &&
+          pile.map((n) => {
+            return <img key={n.key + "discard"} src={n.image}></img>;
+          })}
+      </div>
+    </div>
+  );
 }
