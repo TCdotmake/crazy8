@@ -66,12 +66,35 @@ export function GameProvider({ children }) {
       setFn((prev) => {
         return [...prev, ...drawnCards];
       });
-      console.log(deckRef.current.length);
     }
   }
 
   function dealToDiscard(n = 1) {
     dealCards(n, setDiscardPile);
+  }
+  function dealToP1(n = 1) {
+    dealCards(n, setP1Pile);
+  }
+  function dealToP2(n = 1) {
+    dealCards(n, setP2Pile);
+  }
+  function newGame() {
+    dealToP1(7);
+    dealToP2(7);
+    dealToDiscard(1);
+    console.log(deckRef.current.length);
+  }
+  function resetGame() {
+    deckRef.current = _.shuffle([
+      ...deckRef.current,
+      ...discardPile,
+      ...p1Pile,
+      ...p2Pile,
+    ]);
+    setDiscardPile([]);
+    setP1Pile([]);
+    setP2Pile([]);
+    console.log(deckRef.current.length);
   }
   // Context variables
   const game = {
@@ -79,6 +102,12 @@ export function GameProvider({ children }) {
     deckRef,
     discardPile,
     dealToDiscard,
+    p1Pile,
+    dealToP1,
+    p2Pile,
+    dealToP2,
+    resetGame,
+    newGame,
   };
 
   return <GameContext.Provider value={game}>{children}</GameContext.Provider>;

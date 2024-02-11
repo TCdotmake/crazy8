@@ -6,27 +6,23 @@ const style = css`
   width: 80px;
   height: auto;
 `;
-export function Discards() {
+export function P1section() {
   const game = useContext(GameContext);
-  const pile = game.discardPile;
+  const pile = game.p1Pile;
   const onClick = () => {
-    game.dealToDiscard(1);
+    game.dealToP1(1);
   };
   return (
     <div>
-      <h1>Discards</h1>
-      <button onClick={onClick}>Deal one card to Discard</button>
+      <h1>P1</h1>
+      <button onClick={onClick}>Deal one card to P1</button>
       <div>
         {pile.length > 0 &&
           pile.map((n) => {
             let alt = n.value + " of " + n.suit;
+
             return (
-              <img
-                css={style}
-                key={n.key + "discard"}
-                src={n.image}
-                alt={alt}
-              ></img>
+              <img css={style} key={n.key + "p1"} src={n.image} alt={alt}></img>
             );
           })}
       </div>
