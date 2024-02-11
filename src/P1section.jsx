@@ -15,7 +15,6 @@ export function P1section() {
   const handlePlay = (e) => {
     if (game.playerTurn) {
       const key = e.target.dataset.key;
-      //to do need to verify if move is valid
       game.p1PlayCard(key);
     }
   };

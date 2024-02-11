@@ -5,6 +5,7 @@ import _ from "lodash";
 const p1 = "player1";
 const p2 = "player2";
 const discards = "discards";
+const WILD = "wild";
 
 export const GameContext = createContext(null);
 
@@ -22,6 +23,11 @@ export function GameProvider({ children }) {
   const deckCountRef = useRef(null);
   const deckRef = useRef(null);
   deckCountRef.current = 1;
+  const [validCondition, setValidCondition] = useState({});
+  const p1wild = useRef(null);
+  const p2wild = useRef(null);
+  p1wild.current = "8";
+  p2wild.current = "8";
   // END REFS
 
   // useEffect hooks
@@ -70,7 +76,21 @@ export function GameProvider({ children }) {
     }
   }
 
+  function updateValidCondition(turn, card) {
+    let condition = {
+      value: card.value,
+      suit: card.suit,
+      wild: turn ? p1wild.current : p2wild.current,
+    };
+    setValidCondition({ ...condition });
+  }
+
   function dealToDiscard(n = 1) {
+    //get the first card
+    const card = structuredClone(deckRef.current[0]);
+    //set conditions
+
+    updateValidCondition(true, card);
     dealCards(n, setDiscardPile);
   }
   function dealToP1(n = 1) {
@@ -84,7 +104,6 @@ export function GameProvider({ children }) {
     dealToP2(7);
     dealToDiscard(1);
     setPlayerTurn(true);
-    console.log(deckRef.current.length);
   }
   function resetGame() {
     deckRef.current = _.shuffle([
@@ -96,10 +115,8 @@ export function GameProvider({ children }) {
     setDiscardPile([]);
     setP1Pile([]);
     setP2Pile([]);
-    console.log(deckRef.current.length);
   }
-  function playCard(key, player, setFn) {
-    //get index
+  function getIndex(key, player) {
     let index = -1;
     for (let i = 0; i < player.length; i++) {
       if (player[i].key === key) {
@@ -107,22 +124,57 @@ export function GameProvider({ children }) {
         break;
       }
     }
+    return index;
+  }
+  function getCard(key, player) {
+    return player[getIndex(key, player)];
+  }
+  function playCard(key, player, setFn) {
+    //get index
+    let index = getIndex(key, player);
     if (index != -1) {
       let copy = structuredClone(player);
-      let card = copy.splice(index, 1);
+      let card = copy.splice(index, 1)[0];
       setFn([...copy]);
       setDiscardPile((prev) => {
-        return [...prev, ...card];
+        return [...prev, card];
       });
     }
   }
   function p1PlayCard(key) {
-    playCard(key, p1Pile, setP1Pile);
-    setPlayerTurn(false);
+    let card = getCard(key, p1Pile);
+    let result = validatePlay(card);
+    if (result) {
+      playCard(key, p1Pile, setP1Pile);
+      setPlayerTurn(false);
+      if (result == WILD) {
+        console.log("need to hand wild");
+      }
+      updateValidCondition(false, card);
+    }
   }
   function p2PlayCard(key) {
-    playCard(key, p2Pile, setP2Pile);
-    setPlayerTurn(true);
+    let card = getCard(key, p2Pile);
+    let result = validatePlay(card);
+    if (result) {
+      playCard(key, p2Pile, setP2Pile);
+      setPlayerTurn(true);
+      if (result == WILD) {
+        console.log("need to hand wild");
+      }
+      updateValidCondition(true, card);
+    }
+  }
+  function validatePlay(card) {
+    if (card.suit == validCondition.suit) {
+      return true;
+    } else if (card.value == validCondition.value) {
+      return true;
+    } else if (card.value == validCondition.wild) {
+      return WILD;
+    } else {
+      return false;
+    }
   }
   // Context variables
   const game = {
@@ -139,6 +191,8 @@ export function GameProvider({ children }) {
     p1PlayCard,
     p2PlayCard,
     playerTurn,
+    getCard,
+    validatePlay,
   };
 
   return <GameContext.Provider value={game}>{children}</GameContext.Provider>;
