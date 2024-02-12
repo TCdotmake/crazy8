@@ -75,16 +75,10 @@ export function GameProvider({ children }) {
   }, [solution]);
 
   useEffect(() => {
-    if (!playerTurn) {
+    if (!playerTurn && p2Pile.length >= 1) {
       setSolution([...createSolution()]);
     }
   }, [p2Pile]);
-
-  // useEffect(() => {
-  //   if (!playerTurn) {
-  //     setSolution([...createSolution()]);
-  //   }
-  // }, [playerTurn, p2Pile]);
 
   // END useEffect hooks
 
@@ -187,24 +181,34 @@ export function GameProvider({ children }) {
     let card = getCard(key, p1Pile);
     let result = validatePlay(card);
     if (result != FAILED) {
+      let cardCount = p1Pile.length;
       playCard(key, p1Pile, setP1Pile);
-      setPlayerTurn(false);
-      if (result == WILD) {
-        console.log("need to hand wild");
+      if (cardCount == 1) {
+        console.log("P1 Win!");
+      } else {
+        setPlayerTurn(false);
+        if (result == WILD) {
+          console.log("need to hand wild");
+        }
+        updateValidCondition(false, card);
       }
-      updateValidCondition(false, card);
     }
   }
   function p2PlayCard(key) {
     let card = getCard(key, p2Pile);
     let result = validatePlay(card);
     if (result != FAILED) {
+      let cardCount = p2Pile.length;
       playCard(key, p2Pile, setP2Pile);
-      setPlayerTurn(true);
-      if (result == WILD) {
-        console.log("need to hand wild");
+      if (cardCount == 1) {
+        console.log("P2 Won!");
+      } else {
+        setPlayerTurn(true);
+        if (result == WILD) {
+          console.log("need to hand wild");
+        }
+        updateValidCondition(true, card);
       }
-      updateValidCondition(true, card);
     }
   }
   function validatePlay(card) {
