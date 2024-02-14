@@ -18,6 +18,7 @@ export const GameContext = createContext(null);
 
 export function GameProvider({ children }) {
   // STATES
+  const [active, setActive] = useState(false);
   const [deck, setDeck] = useState(null);
   const [loaded, setloaded] = useState(false);
   const [discardPile, setDiscardPile] = useState([]);
@@ -36,9 +37,12 @@ export function GameProvider({ children }) {
   const p2wild = useRef(null);
   p1wild.current = "8";
   p2wild.current = "8";
+
   // END REFS
 
   // useEffect hooks
+
+  // initial load
   useEffect(() => {
     loadDeck(deckCountRef, setDeck);
   }, []);
@@ -52,7 +56,9 @@ export function GameProvider({ children }) {
       setloaded(true);
     }
   }, [deck]);
+  // initial load END
 
+  // CPU Behavior
   //run createSolution at least once when turn changes
   useEffect(() => {
     if (playerTurn) {
@@ -63,6 +69,8 @@ export function GameProvider({ children }) {
     }
   }, [playerTurn]);
 
+  //play card if there's a valid solution
+  //if not, draw a card
   useEffect(() => {
     console.log(solution);
     if (!playerTurn) {
@@ -73,7 +81,7 @@ export function GameProvider({ children }) {
       }
     }
   }, [solution]);
-
+  //see if there's a solution after card has been drawn
   useEffect(() => {
     if (!playerTurn && p2Pile.length >= 1) {
       setSolution([...createSolution()]);
@@ -130,7 +138,9 @@ export function GameProvider({ children }) {
     dealCards(n, setDiscardPile);
   }
   function dealToP1(n = 1) {
-    dealCards(n, setP1Pile);
+    if (playerTurn) {
+      dealCards(n, setP1Pile);
+    }
   }
   function dealToP2(n = 1) {
     dealCards(n, setP2Pile);
@@ -140,6 +150,7 @@ export function GameProvider({ children }) {
     dealToP2(7);
     dealToDiscard(1);
     setPlayerTurn(true);
+    setActive(true);
   }
   function resetGame() {
     deckRef.current = _.shuffle([
@@ -151,7 +162,9 @@ export function GameProvider({ children }) {
     setDiscardPile([]);
     setP1Pile([]);
     setP2Pile([]);
+    setActive(false);
   }
+
   function getIndex(key, player) {
     let index = -1;
     for (let i = 0; i < player.length; i++) {
@@ -185,6 +198,7 @@ export function GameProvider({ children }) {
       playCard(key, p1Pile, setP1Pile);
       if (cardCount == 1) {
         console.log("P1 Win!");
+        setActive(false);
       } else {
         setPlayerTurn(false);
         if (result == WILD) {
@@ -202,6 +216,7 @@ export function GameProvider({ children }) {
       playCard(key, p2Pile, setP2Pile);
       if (cardCount == 1) {
         console.log("P2 Won!");
+        setActive(false);
       } else {
         setPlayerTurn(true);
         if (result == WILD) {
@@ -226,13 +241,6 @@ export function GameProvider({ children }) {
     }
   }
 
-  function CPUaction() {
-    console.log("Entered CPU action");
-    setSolution([...arr]);
-
-    // p2PlayCard(solution[0].key);
-  }
-
   // Context variables
   const game = {
     loaded,
@@ -250,6 +258,7 @@ export function GameProvider({ children }) {
     playerTurn,
     getCard,
     validatePlay,
+    active,
   };
 
   return <GameContext.Provider value={game}>{children}</GameContext.Provider>;
