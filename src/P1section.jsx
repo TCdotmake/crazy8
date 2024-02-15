@@ -6,12 +6,18 @@ const style = css`
   width: 80px;
   height: auto;
 `;
+
+const containerCss = css`
+  width: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-item: center;
+`;
 export function P1section() {
   const game = useContext(GameContext);
   const pile = game.p1Pile;
-  const onClick = () => {
-    game.dealToP1(1);
-  };
+
   const handlePlay = (e) => {
     if (game.playerTurn) {
       const key = e.target.dataset.key;
@@ -19,26 +25,27 @@ export function P1section() {
     }
   };
   return (
-    <div>
-      <h1>P1</h1>
-      <button onClick={onClick}>Deal one card to P1</button>
-      <div>
-        {pile.length > 0 &&
-          pile.map((n) => {
-            let alt = n.value + " of " + n.suit;
-            return (
-              <button onClick={handlePlay} key={n.key + "btn"} data-key={n.key}>
-                <img
-                  css={style}
-                  key={n.key + "p1"}
-                  src={n.image}
-                  alt={alt}
-                  data-key={n.key}
-                ></img>
-              </button>
-            );
-          })}
-      </div>
+    <div css={containerCss}>
+      {pile.length > 0 &&
+        pile.map((n, index) => {
+          let alt = n.value + " of " + n.suit;
+          let mid = (pile.length - 1) / 2;
+          let offset = (index - mid) * -1;
+          return (
+            <button onClick={handlePlay} key={n.key + "btn"} data-key={n.key}>
+              <img
+                css={css`
+                  width: 80px;
+                  transform: translateX(calc(${offset} * 40px));
+                `}
+                key={n.key + "p1"}
+                src={n.image}
+                alt={alt}
+                data-key={n.key}
+              ></img>
+            </button>
+          );
+        })}
     </div>
   );
 }

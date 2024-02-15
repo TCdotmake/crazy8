@@ -8,6 +8,8 @@ import { Discards } from "./Discards";
 import { P1section } from "./P1section";
 import { P2section } from "./P2section";
 import { Top } from "./Top";
+import { Mid } from "./Mid";
+import "./App.css";
 function App() {
   return (
     <GameProvider>
@@ -16,11 +18,9 @@ function App() {
       </header>
       <main>
         <Top></Top>
+        <Mid></Mid>
+        <P1section></P1section>
       </main>
-      <DummyChild></DummyChild>
-      <Discards></Discards>
-      <P1section></P1section>
-      <P2section></P2section>
     </GameProvider>
   );
 }
