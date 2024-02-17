@@ -30,14 +30,21 @@ export function P1section() {
         pile.map((n, index) => {
           let alt = n.value + " of " + n.suit;
           let mid = (pile.length - 1) / 2;
-          let offset = (index - mid) * -1;
+          let offset = index - mid;
+          let margin = offset > 0 ? "marginLeft" : "marginRight";
+          let val = Math.abs(offset) * 20 * -1;
+
           return (
-            <button onClick={handlePlay} key={n.key + "btn"} data-key={n.key}>
+            <button
+              css={css`
+                transform: translateX(calc(-60px * ${offset}));
+              `}
+              onClick={handlePlay}
+              key={n.key + "btn"}
+              data-key={n.key}
+            >
               <img
-                css={css`
-                  width: 80px;
-                  transform: translateX(calc(${offset} * 40px));
-                `}
+                css={{ width: 80 }}
                 key={n.key + "p1"}
                 src={n.image}
                 alt={alt}
