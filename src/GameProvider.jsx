@@ -94,7 +94,9 @@ export function GameProvider({ children }) {
   //p2 handle playing wild
   useEffect(() => {
     if (p2choose) {
+      console.log("inside p2choose");
       let suit = chooseSuit();
+      console.log("suit: " + suit);
       setValidCondition({
         value: null,
         suit: suit,
@@ -164,9 +166,6 @@ export function GameProvider({ children }) {
     dealCards(n, setP2Pile);
   }
   function newGame() {
-    if (discardPile.length > 0) {
-      resetGame();
-    }
     dealToP1(7);
     dealToP2(7);
     dealToDiscard(1);
@@ -239,7 +238,6 @@ export function GameProvider({ children }) {
           }
         } else {
           setPlayerTurn(nextTurn);
-
           updateValidCondition(nextTurn, card);
         }
       }
@@ -252,15 +250,12 @@ export function GameProvider({ children }) {
     playerPlayCard(p2Pile, setP2Pile, key);
   }
   function validatePlay(card) {
-    if (card.suit == validCondition.suit) {
-      return PASSED;
-    } else if (
-      validCondition.value == ANY ||
-      card.value == validCondition.value
-    ) {
-      return PASSED;
-    } else if (card.value == validCondition.wild) {
+    if (card.value == validCondition.wild) {
       return WILD;
+    } else if (card.suit == validCondition.suit) {
+      return PASSED;
+    } else if (card.value == validCondition.value) {
+      return PASSED;
     } else {
       return FAILED;
     }
@@ -311,6 +306,9 @@ export function GameProvider({ children }) {
       [HEARTS]: { cards: [] },
       [SPADES]: { cards: [] },
     };
+    copy.map((card) => {
+      cardsObj[`${card.suit}`].cards.push(card);
+    });
     copy = [];
     _.forEach(cardsObj, (n) => {
       copy.push(n.cards);
@@ -318,7 +316,12 @@ export function GameProvider({ children }) {
     copy.sort((a, b) => {
       return b.length - a.length;
     });
-    return copy[0][0].suit;
+    let sorted = [];
+    _.forEach(copy, (n) => {
+      sorted = [...sorted, ...n];
+    });
+    console.log(sorted);
+    return sorted[0].suit;
   }
 
   function createSolution() {

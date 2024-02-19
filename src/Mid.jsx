@@ -17,7 +17,9 @@ const flexRow = css`
 export function Mid() {
   const game = useContext(GameContext);
   const handleDraw = () => {
-    game.dealToP1(1);
+    if (game.active) {
+      game.dealToP1(1);
+    }
   };
   return (
     <div>
