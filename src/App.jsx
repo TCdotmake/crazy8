@@ -1,12 +1,9 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 import { GameProvider } from "./GameProvider";
-import { DummyChild } from "./DummyChild";
-import { Discards } from "./Discards";
 import { P1section } from "./P1section";
-import { P2section } from "./P2section";
 import { Top } from "./Top";
 import { Mid } from "./Mid";
 import "./App.css";
