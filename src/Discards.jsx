@@ -2,10 +2,26 @@ import { useContext } from "react";
 import { GameContext } from "./GameProvider";
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-const style = css`
-  width: 80px;
-  height: auto;
+import { cardSizeCss } from "./P1section";
+import { absCenterCss } from "./Mid";
+
+const stickyCss = css`
+  background: orchid;
+  width: 50px;
+  height: 50px;
+  z-index: 500;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  > h3 {
+    font-size: 12px;
+  }
+  > p {
+    font-size: 8px;
+  }
 `;
+
 export function Discards() {
   const game = useContext(GameContext);
   const pile = game.discardPile;
@@ -17,14 +33,22 @@ export function Discards() {
   }
 
   return (
-    <div
-      css={css`
-        position: relative;
-      `}
-    >
+    <div>
+      <p
+        css={css`
+          z-index: 100;
+        `}
+      >
+        Discards
+      </p>
       {pile.length > 0 && (
         <img
-          css={style}
+          css={[
+            cardSizeCss,
+            css`
+              z-index: 200;
+            `,
+          ]}
           key={topCard.key + "topCard"}
           src={topCard.image}
           alt={alt}
@@ -32,36 +56,16 @@ export function Discards() {
       )}
       {pile.length > 0 && game.wildTurn && (
         <div
-          css={css`
-            background: orchid;
-            width: 50px;
-            height: 50px;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 500;
-          `}
+          css={[
+            absCenterCss,
+            stickyCss,
+            css`
+              z-index: 300;
+            `,
+          ]}
         >
-          <div
-            css={css`
-              height: 100%;
-              display: flex;
-              flex-direction: column;
-              justify-content: center;
-              align-items: center;
-              > h3 {
-                font-size: 12px;
-              }
-              > p {
-                font-size: 8px;
-              }
-            `}
-          >
-            {" "}
-            <h3>Crazy 8!</h3>
-            <p>{game.validCondition.suit}</p>
-          </div>
+          <h3>Crazy 8!</h3>
+          <p>{game.validCondition.suit}</p>
         </div>
       )}
     </div>

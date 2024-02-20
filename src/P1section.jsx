@@ -7,6 +7,10 @@ const style = css`
   height: auto;
 `;
 
+export const cardSizeCss = css`
+  width: var(--card-width);
+  height: auto;
+`;
 const containerCss = css`
   width: auto;
   display: flex;
@@ -37,14 +41,14 @@ export function P1section() {
           return (
             <button
               css={css`
-                transform: translateX(calc(-60px * ${offset}));
+                transform: translateX(calc(-85px * ${offset}));
               `}
               onClick={handlePlay}
               key={n.key + "btn"}
               data-key={n.key}
             >
               <img
-                css={{ width: 80 }}
+                css={cardSizeCss}
                 key={n.key + "p1"}
                 src={n.image}
                 alt={alt}

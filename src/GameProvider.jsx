@@ -18,6 +18,7 @@ export const GameContext = createContext(null);
 
 export function GameProvider({ children }) {
   // STATES
+  const [gameStart, setGameStart] = useState(false);
   const [active, setActive] = useState(false);
   const [deck, setDeck] = useState(null);
   const [loaded, setloaded] = useState(false);
@@ -171,6 +172,7 @@ export function GameProvider({ children }) {
     dealToDiscard(1);
     setPlayerTurn(true);
     setActive(true);
+    setGameStart(true);
   }
   function resetGame() {
     deckRef.current = _.shuffle([
@@ -184,6 +186,7 @@ export function GameProvider({ children }) {
     setP1Pile([]);
     setP2Pile([]);
     setActive(false);
+    setGameStart(false);
   }
 
   function getIndex(key, player) {
@@ -294,6 +297,7 @@ export function GameProvider({ children }) {
     p1setSuit,
     wildTurn,
     validCondition,
+    gameStart,
   };
 
   return <GameContext.Provider value={game}>{children}</GameContext.Provider>;

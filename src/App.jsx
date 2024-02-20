@@ -10,7 +10,14 @@ import "./App.css";
 function App() {
   return (
     <GameProvider>
-      <header>
+      <header
+        css={css`
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+        `}
+      >
         <h1>Crazy 8!</h1>
       </header>
       <main>
