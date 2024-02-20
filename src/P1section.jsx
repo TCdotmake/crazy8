@@ -20,7 +20,7 @@ const containerCss = css`
 `;
 
 export function P1section() {
-  const ARRSIZE = 8;
+  const ARRSIZE = 7;
   const game = useContext(GameContext);
   const pile = game.p1Pile;
   const copy = structuredClone(pile);
@@ -43,6 +43,9 @@ export function P1section() {
         containerCss,
         css`
           flex-direction: column;
+          > *:first-child {
+            margin-top: 0;
+          }
         `,
       ]}
     >
@@ -77,7 +80,14 @@ export function P1section() {
       {multiArr.length > 0 &&
         multiArr.map((sub) => {
           return (
-            <div css={containerCss}>
+            <div
+              css={[
+                containerCss,
+                css`
+                  margin-top: -110px;
+                `,
+              ]}
+            >
               {sub.length > 0 &&
                 sub.map((n, index) => {
                   let alt = n.value + " of " + n.suit;
@@ -89,7 +99,7 @@ export function P1section() {
                   return (
                     <button
                       css={css`
-                        transform: translateX(calc(-85px * ${offset}));
+                        transform: translateX(calc(-80px * ${offset}));
                       `}
                       onClick={handlePlay}
                       key={n.key + "btn"}
