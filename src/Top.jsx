@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { GameContext } from "./GameProvider";
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
@@ -11,6 +11,7 @@ const flexRow = css`
 export function Top() {
   const game = useContext(GameContext);
   const [active, setActive] = useState(false);
+
   function toggleActive() {
     setActive((prev) => !prev);
   }
@@ -22,7 +23,7 @@ export function Top() {
   return (
     <div css={flexRow}>
       <button onClick={handleClick}>{(active && "Reset") || "New Game"}</button>
-      <p>{`CPU X ${game.p2Pile.length}`}</p>
+      <p>{`CPU X ${game.p2show}`}</p>
     </div>
   );
 }

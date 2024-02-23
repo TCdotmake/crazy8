@@ -7,6 +7,7 @@ import { P1section } from "./P1section";
 import { Top } from "./Top";
 import { Mid } from "./Mid";
 import "./App.css";
+import { FramerMotionPlayPen } from "./FramerPlayPen";
 function App() {
   return (
     <GameProvider>

@@ -30,6 +30,9 @@ export function GameProvider({ children }) {
   const [wildTurn, setWildTurn] = useState(false);
   const [p1choose, setp1choose] = useState(false);
   const [p2choose, setp2choose] = useState(false);
+  const [solutionRdy, setSolutionRdy] = useState(false);
+  const [p2count, setp2count] = useState(0);
+  const [p2show, setp2show] = useState(0);
   // END STATES
 
   // REFS
@@ -41,6 +44,7 @@ export function GameProvider({ children }) {
   const p2wild = useRef(null);
   p1wild.current = "8";
   p2wild.current = "8";
+  const p2Ref = useRef(null);
 
   // END REFS
 
@@ -63,64 +67,143 @@ export function GameProvider({ children }) {
   // initial load END
 
   // CPU Behavior
-  //run createSolution at least once when turn changes
+  // //run createSolution at least once when turn changes
+  // useEffect(() => {
+  //   if (playerTurn) {
+  //     setSolution([]);
+  //   }
+  //   if (!playerTurn) {
+  //     setSolution([...createSolution()]);
+  //   }
+  // }, [playerTurn]);
+
+  // //play card if there's a valid solution
+  // //if not, draw a card
+  // useEffect(() => {
+  //   console.log(solution);
+  //   if (!playerTurn) {
+  //     if (solution.length >= 1) {
+  //       p2PlayCard(solution[0].key);
+  //     } else {
+  //       dealToP2(1);
+  //     }
+  //   }
+  // }, [solution]);
+  // //see if there's a solution after card has been drawn
+  // useEffect(() => {
+  //   if (!playerTurn && p2Pile.length >= 1) {
+  //     setSolution([...createSolution()]);
+  //   }
+  // }, [p2Pile]);
+
+  // //p2 handle playing wild
+  // useEffect(() => {
+  //   if (p2choose) {
+  //     console.log("inside p2choose");
+  //     let suit = chooseSuit();
+  //     console.log("suit: " + suit);
+  //     setValidCondition({
+  //       value: null,
+  //       suit: suit,
+  //       wild: p1wild.current,
+  //     });
+  //     setp2choose(false);
+  //     setWildTurn(true);
+  //     setPlayerTurn(true);
+  //   }
+  // }, [p2choose]);
+
   useEffect(() => {
-    if (playerTurn) {
-      setSolution([]);
-    }
     if (!playerTurn) {
-      setSolution([...createSolution()]);
+      p2TurnAction();
     }
   }, [playerTurn]);
 
-  //play card if there's a valid solution
-  //if not, draw a card
   useEffect(() => {
-    console.log(solution);
-    if (!playerTurn) {
-      if (solution.length >= 1) {
-        p2PlayCard(solution[0].key);
-      } else {
-        dealToP2(1);
-      }
+    let diff = 0;
+    if (p2count > p2show) {
+      diff = 1;
     }
-  }, [solution]);
-  //see if there's a solution after card has been drawn
-  useEffect(() => {
-    if (!playerTurn && p2Pile.length >= 1) {
-      setSolution([...createSolution()]);
+    if (p2count < p2show) {
+      diff = -1;
     }
-  }, [p2Pile]);
+    if (diff != 0) {
+      setTimeout(() => {
+        setp2show((prev) => {
+          return (prev += diff);
+        });
+      }, 100);
+    }
+  }, [p2count, p2show]);
 
-  //p2 handle playing wild
   useEffect(() => {
-    if (p2choose) {
-      console.log("inside p2choose");
-      let suit = chooseSuit();
-      console.log("suit: " + suit);
-      setValidCondition({
-        value: null,
-        suit: suit,
-        wild: p1wild.current,
-      });
-      setp2choose(false);
-      setWildTurn(true);
-      setPlayerTurn(true);
+    if (p2count == p2show && solutionRdy) {
+      //to do
+      //handle wild
+      //handle change turn
+      //handle win condition
+      let key = solution[0].key;
+      let card = solution[0];
+      let nextTurn = !playerTurn;
+      let result = validatePlay(card);
+      p2PlayCard(key);
+      setp2count(p2Ref.current.length);
+      if (wildTurn) {
+        setWildTurn(false);
+      }
+      //check for win
+      if (p2Ref.current.length == 0) {
+        setActive(false);
+        console.log("p2 Win!");
+      } else {
+        if (result == WILD) {
+          console.log("entering wild");
+          let suit = chooseSuit();
+          setValidCondition({
+            value: null,
+            suit,
+            wild: p1wild.current,
+          });
+          setWildTurn(true);
+        } else {
+          updateValidCondition(nextTurn, card);
+        }
+        setPlayerTurn(true);
+      }
+      setSolutionRdy(false);
+      setSolution([]);
     }
-  }, [p2choose]);
+  }, [p2count, p2show, solutionRdy]);
 
   // END useEffect hooks
 
   // helper functions
+
+  function updatep2Ref(cards) {
+    if (p2Ref.current == null) {
+      p2Ref.current = [];
+    }
+    p2Ref.current = [...p2Ref.current, ...cards];
+  }
+
+  function p1setFn(drawnCards) {
+    setP1Pile((prev) => {
+      return [...prev, ...drawnCards];
+    });
+  }
+
+  function p2setFn(drawnCards) {
+    updatep2Ref(drawnCards);
+    console.log(p2Ref.current);
+    setP2Pile((prev) => {
+      return [...prev, ...drawnCards];
+    });
+  }
+
   function dealCards(numOfCards, setFn) {
     if (numOfCards > deckRef.current.length) {
       // need to handle shuffling discards back into deck
-      let copy = structuredClone(discardPile);
-      let topCard = copy.pop();
-      copy = [...copy, ...structuredClone(deckRef.current)];
-      copy = _.shuffle(copy);
-      setDiscardPile([topCard]);
-      deckRef.current = [...copy];
+      shuffleDiscardToDeck();
 
       if (numOfCards > deckRef.current.length) {
         return false;
@@ -135,9 +218,36 @@ export function GameProvider({ children }) {
 
     function executeDraw() {
       let drawnCards = deckRef.current.splice(0, numOfCards);
-      setFn((prev) => {
-        return [...prev, ...drawnCards];
-      });
+      setFn(drawnCards);
+    }
+  }
+
+  function shuffleDiscardToDeck() {
+    let copy = structuredClone(discardPile);
+    let topCard = copy.pop();
+    copy = [...copy, ...structuredClone(deckRef.current)];
+    copy = _.shuffle(copy);
+    setDiscardPile([topCard]);
+    deckRef.current = [...copy];
+  }
+
+  function dealp2Ref(numOfCards) {
+    if (numOfCards > deckRef.current.length) {
+      shuffleDiscardToDeck();
+      if (numOfCards > deckRef.current.length) {
+        return false;
+      } else {
+        deal();
+        return true;
+      }
+    } else {
+      deal();
+      return true;
+    }
+
+    function deal() {
+      let drawnCards = deckRef.current.splice(0, numOfCards);
+      updatep2Ref(drawnCards);
     }
   }
 
@@ -160,16 +270,19 @@ export function GameProvider({ children }) {
   }
   function dealToP1(n = 1) {
     if (playerTurn) {
-      dealCards(n, setP1Pile);
+      dealCards(n, p1setFn);
     }
   }
   function dealToP2(n = 1) {
-    dealCards(n, setP2Pile);
+    dealCards(n, p2setFn);
   }
   function newGame() {
-    dealToP1(7);
-    dealToP2(7);
-    dealToDiscard(1);
+    let initialCount = 7;
+    dealToDiscard();
+    dealToP1(initialCount);
+    dealp2Ref(initialCount);
+
+    setp2count(initialCount);
     setPlayerTurn(true);
     setActive(true);
     setGameStart(true);
@@ -179,8 +292,9 @@ export function GameProvider({ children }) {
       ...deckRef.current,
       ...discardPile,
       ...p1Pile,
-      ...p2Pile,
+      ...p2Ref.current,
     ]);
+    p2Ref.current = [];
     setWildTurn(false);
     setDiscardPile([]);
     setP1Pile([]);
@@ -250,7 +364,14 @@ export function GameProvider({ children }) {
     playerPlayCard(p1Pile, setP1Pile, key);
   }
   function p2PlayCard(key) {
-    playerPlayCard(p2Pile, setP2Pile, key);
+    let index = getIndex(key, p2Ref.current);
+    if (index != -1) {
+      let copy = p2Ref.current;
+      let card = copy.splice(index, 1)[0];
+      setDiscardPile((prev) => {
+        return [...prev, card];
+      });
+    }
   }
   function validatePlay(card) {
     if (card.value == validCondition.wild) {
@@ -275,35 +396,8 @@ export function GameProvider({ children }) {
     setPlayerTurn(false);
   }
 
-  // Context variables
-  const game = {
-    loaded,
-    deckRef,
-    discardPile,
-    dealToDiscard,
-    p1Pile,
-    dealToP1,
-    p2Pile,
-    dealToP2,
-    resetGame,
-    newGame,
-    p1PlayCard,
-    p2PlayCard,
-    playerTurn,
-    getCard,
-    validatePlay,
-    active,
-    p1choose,
-    p1setSuit,
-    wildTurn,
-    validCondition,
-    gameStart,
-  };
-
-  return <GameContext.Provider value={game}>{children}</GameContext.Provider>;
-
   function chooseSuit() {
-    let copy = structuredClone(p2Pile);
+    let copy = structuredClone(p2Ref.current);
     let cardsObj = {
       [CLUBS]: { cards: [] },
       [DIAMONDS]: { cards: [] },
@@ -329,7 +423,7 @@ export function GameProvider({ children }) {
   }
 
   function createSolution() {
-    let copy = structuredClone(p2Pile);
+    let copy = structuredClone(p2Ref.current);
     let cardsObj = {
       [CLUBS]: { cards: [] },
       [DIAMONDS]: { cards: [] },
@@ -359,4 +453,49 @@ export function GameProvider({ children }) {
 
     return sortedArr;
   }
+
+  function p2TurnAction() {
+    let attempt = createSolution();
+    while (attempt.length < 1) {
+      console.log("entering solution loop");
+      dealp2Ref(1);
+      attempt = createSolution();
+    }
+    if (attempt.length > 0) {
+      console.log("solution");
+      console.log(attempt);
+      setSolution([...attempt]);
+      setSolutionRdy(true);
+      setp2count(p2Ref.current.length);
+    }
+  }
+
+  // Context variables
+  const game = {
+    loaded,
+    deckRef,
+    discardPile,
+    dealToDiscard,
+    p1Pile,
+    dealToP1,
+    p2Pile,
+    dealToP2,
+    resetGame,
+    newGame,
+    p1PlayCard,
+    p2PlayCard,
+    playerTurn,
+    getCard,
+    validatePlay,
+    active,
+    p1choose,
+    p1setSuit,
+    wildTurn,
+    validCondition,
+    gameStart,
+    p2Ref,
+    p2show,
+  };
+
+  return <GameContext.Provider value={game}>{children}</GameContext.Provider>;
 }
