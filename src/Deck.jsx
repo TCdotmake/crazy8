@@ -41,6 +41,7 @@ export function Deck() {
             color: white;
             background: grey;
           `}
+          onClick={handleDraw}
         >
           Draw
         </p>

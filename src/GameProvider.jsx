@@ -137,10 +137,6 @@ export function GameProvider({ children }) {
 
   useEffect(() => {
     if (p2count == p2show && solutionRdy) {
-      //to do
-      //handle wild
-      //handle change turn
-      //handle win condition
       let key = solution[0].key;
       let card = solution[0];
       let nextTurn = !playerTurn;
@@ -156,7 +152,6 @@ export function GameProvider({ children }) {
         console.log("p2 Win!");
       } else {
         if (result == WILD) {
-          console.log("entering wild");
           let suit = chooseSuit();
           setValidCondition({
             value: null,
@@ -293,6 +288,7 @@ export function GameProvider({ children }) {
     setWildTurn(false);
     setActive(false);
     setGameStart(false);
+    setPlayerTurn(true);
   }
 
   function getIndex(key, player) {
@@ -339,7 +335,6 @@ export function GameProvider({ children }) {
         setActive(false);
       } else {
         if (result == WILD) {
-          console.log("need to hand wild");
           if (playerTurn) {
             setp1choose(true);
           } else {
@@ -410,7 +405,6 @@ export function GameProvider({ children }) {
     _.forEach(copy, (n) => {
       sorted = [...sorted, ...n];
     });
-    console.log(sorted);
     return sorted[0].suit;
   }
 
@@ -449,13 +443,10 @@ export function GameProvider({ children }) {
   function p2TurnAction() {
     let attempt = createSolution();
     while (attempt.length < 1) {
-      console.log("entering solution loop");
       dealp2Ref(1);
       attempt = createSolution();
     }
     if (attempt.length > 0) {
-      console.log("solution");
-      console.log(attempt);
       setSolution([...attempt]);
       setSolutionRdy(true);
       setp2count(p2Ref.current.length);
