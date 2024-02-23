@@ -24,7 +24,6 @@ export function GameProvider({ children }) {
   const [loaded, setloaded] = useState(false);
   const [discardPile, setDiscardPile] = useState([]);
   const [p1Pile, setP1Pile] = useState([]);
-  const [p2Pile, setP2Pile] = useState([]);
   const [playerTurn, setPlayerTurn] = useState(true);
   const [solution, setSolution] = useState([]);
   const [wildTurn, setWildTurn] = useState(false);
@@ -192,14 +191,6 @@ export function GameProvider({ children }) {
     });
   }
 
-  function p2setFn(drawnCards) {
-    updatep2Ref(drawnCards);
-    console.log(p2Ref.current);
-    setP2Pile((prev) => {
-      return [...prev, ...drawnCards];
-    });
-  }
-
   function dealCards(numOfCards, setFn) {
     if (numOfCards > deckRef.current.length) {
       // need to handle shuffling discards back into deck
@@ -273,32 +264,33 @@ export function GameProvider({ children }) {
       dealCards(n, p1setFn);
     }
   }
-  function dealToP2(n = 1) {
-    dealCards(n, p2setFn);
-  }
-  function newGame() {
-    let initialCount = 7;
-    dealToDiscard();
-    dealToP1(initialCount);
-    dealp2Ref(initialCount);
 
-    setp2count(initialCount);
-    setPlayerTurn(true);
-    setActive(true);
-    setGameStart(true);
+  function newGame() {
+    setTimeout(() => {
+      let initialCount = 7;
+      dealToDiscard();
+      dealToP1(initialCount);
+      dealp2Ref(initialCount);
+      setp2count(initialCount);
+      setPlayerTurn(true);
+      setActive(true);
+      setGameStart(true);
+    }, 300);
   }
   function resetGame() {
+    setp2count(0);
+    let p1 = structuredClone(p1Pile);
+    let dis = structuredClone(discardPile);
+    setDiscardPile([]);
+    setP1Pile([]);
     deckRef.current = _.shuffle([
       ...deckRef.current,
-      ...discardPile,
-      ...p1Pile,
+      ...dis,
+      ...p1,
       ...p2Ref.current,
     ]);
     p2Ref.current = [];
     setWildTurn(false);
-    setDiscardPile([]);
-    setP1Pile([]);
-    setP2Pile([]);
     setActive(false);
     setGameStart(false);
   }
@@ -478,8 +470,6 @@ export function GameProvider({ children }) {
     dealToDiscard,
     p1Pile,
     dealToP1,
-    p2Pile,
-    dealToP2,
     resetGame,
     newGame,
     p1PlayCard,
