@@ -23,8 +23,8 @@ export const absCenterCss = css`
 
 const deckContainerCss = css`
   > * {
-    width: calc(var(--card-width) + 10px);
-    height: calc(var(--card-height) + 14px);
+    width: calc(var(--card-width) + 30px);
+    height: calc(var(--card-height) + 34px);
     border: 1px solid red;
     position: relative;
     > * {

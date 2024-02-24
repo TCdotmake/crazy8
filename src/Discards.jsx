@@ -41,19 +41,30 @@ export function Discards() {
       >
         Discards
       </p>
-      {pile.length > 0 && (
-        <img
-          css={[
-            cardSizeCss,
-            css`
-              z-index: 200;
-            `,
-          ]}
-          key={topCard.key + "topCard"}
-          src={topCard.image}
-          alt={alt}
-        ></img>
-      )}
+
+      {pile.length > 0 &&
+        pile.map((card) => {
+          return (
+            <div
+              css={css`
+                z-index: 200;
+              `}
+            >
+              <img
+                src={card.image}
+                alt={`${card.value} of ${card.suit}`}
+                key={`${card.key}dis`}
+                css={[
+                  cardSizeCss,
+                  css`
+                    ${card.disCss}
+                  `,
+                ]}
+              ></img>
+            </div>
+          );
+        })}
+
       {pile.length > 0 && game.wildTurn && (
         <div
           css={[

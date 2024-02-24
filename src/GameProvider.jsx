@@ -55,62 +55,21 @@ export function GameProvider({ children }) {
   }, []);
 
   useEffect(() => {
+    const maxDeg = 50;
+    const maxPx = 20;
     if (deck) {
       deckRef.current = [...deck];
       deckRef.current.forEach((n) => {
         n.key = uuid();
+        let deg = Math.round(Math.random() * maxDeg - maxDeg / 2);
+        let pxx = Math.round(Math.random() * maxPx - maxPx / 2);
+        let pxy = Math.round(Math.random() * maxPx - maxPx / 2);
+        n.disCss = `rotate: ${deg}deg; transform: translate(${pxx}px, ${pxy}px)`;
       });
       setloaded(true);
     }
   }, [deck]);
   // initial load END
-
-  // CPU Behavior
-  // //run createSolution at least once when turn changes
-  // useEffect(() => {
-  //   if (playerTurn) {
-  //     setSolution([]);
-  //   }
-  //   if (!playerTurn) {
-  //     setSolution([...createSolution()]);
-  //   }
-  // }, [playerTurn]);
-
-  // //play card if there's a valid solution
-  // //if not, draw a card
-  // useEffect(() => {
-  //   console.log(solution);
-  //   if (!playerTurn) {
-  //     if (solution.length >= 1) {
-  //       p2PlayCard(solution[0].key);
-  //     } else {
-  //       dealToP2(1);
-  //     }
-  //   }
-  // }, [solution]);
-  // //see if there's a solution after card has been drawn
-  // useEffect(() => {
-  //   if (!playerTurn && p2Pile.length >= 1) {
-  //     setSolution([...createSolution()]);
-  //   }
-  // }, [p2Pile]);
-
-  // //p2 handle playing wild
-  // useEffect(() => {
-  //   if (p2choose) {
-  //     console.log("inside p2choose");
-  //     let suit = chooseSuit();
-  //     console.log("suit: " + suit);
-  //     setValidCondition({
-  //       value: null,
-  //       suit: suit,
-  //       wild: p1wild.current,
-  //     });
-  //     setp2choose(false);
-  //     setWildTurn(true);
-  //     setPlayerTurn(true);
-  //   }
-  // }, [p2choose]);
 
   useEffect(() => {
     if (!playerTurn) {
