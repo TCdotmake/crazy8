@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { GameContext } from "./GameProvider";
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 const style = css`
   width: 80px;
   height: auto;
@@ -17,7 +17,7 @@ const containerCss = css`
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-item: center;
+  align-items: center;
 `;
 
 const initial = { opacity: 0 };
@@ -39,6 +39,7 @@ export function P1section() {
   const ARRSIZE = 7;
   const game = useContext(GameContext);
   const pile = game.p1Pile;
+
   const copy = structuredClone(pile);
   const multiArr = [];
   while (copy.length > ARRSIZE) {
@@ -65,7 +66,51 @@ export function P1section() {
         `,
       ]}
     >
-      {multiArr.length > 0 &&
+      {pile.length > 0 && (
+        <div
+          css={css`
+            width: 290px;
+            > *:first-child,
+            > *:nth-child(7n + 1) {
+              margin-left: 0;
+            }
+            > *:nth-child(n + 8) {
+              margin-top: -120px;
+            }
+            > * {
+              margin-left: -80px;
+            }
+          `}
+        >
+          <AnimatePresence>
+            {pile.map((n) => {
+              return (
+                <motion.button
+                  initial={{ opacity: 0, y: 100 }}
+                  animate={{
+                    opacity: 1,
+                    y: 0,
+                  }}
+                  exit={{ opacity: 0, y: -100 }}
+                  onClick={handlePlay}
+                  key={n.key + "btn"}
+                  data-key={n.key}
+                >
+                  <img
+                    css={cardSizeCss}
+                    key={n.key + "p1"}
+                    src={n.image}
+                    alt={`${n.value} of ${n.suit}`}
+                    data-key={n.key}
+                  ></img>
+                </motion.button>
+              );
+            })}
+          </AnimatePresence>
+        </div>
+      )}
+
+      {/* {multiArr.length > 0 &&
         multiArr.map((sub, subInd) => {
           const subZ = subInd * 100;
           return (
@@ -77,44 +122,45 @@ export function P1section() {
                   z-index: ${subZ};
                 `,
               ]}
-              variants={staggerMotion}
-              initial="initial"
-              animate="animate"
             >
-              {sub.length > 0 &&
-                sub.map((n, index) => {
-                  let alt = n.value + " of " + n.suit;
-                  let mid = (sub.length - 1) / 2;
-                  let offset = index - mid;
+              <AnimatePresence>
+                {sub.length > 0 &&
+                  sub.map((n, index) => {
+                    let alt = n.value + " of " + n.suit;
+                    let mid = (sub.length - 1) / 2;
+                    let offset = index - mid;
 
-                  return (
-                    <motion.button
-                      initial={{ opacity: 0, y: 100 }}
-                      animate={{
-                        opacity: 1,
-                        y: 0,
-                        x: -80 * offset,
-                      }}
-                      css={css`
-                        z-index: ${subZ + index};
-                      `}
-                      onClick={handlePlay}
-                      key={n.key + "btn"}
-                      data-key={n.key}
-                    >
-                      <img
-                        css={cardSizeCss}
-                        key={n.key + "p1"}
-                        src={n.image}
-                        alt={alt}
+                    return (
+                      <motion.button
+                        initial={{ opacity: 0, y: 100 }}
+                        animate={{
+                          opacity: 1,
+                          y: 0,
+                          x: -80 * offset,
+                        }}
+                        exit={{ opacity: 0, y: -100, x: -80 * offset }}
+                        css={css`
+                          z-index: ${subZ + index};
+
+                        `}
+                        onClick={handlePlay}
+                        key={n.key + "btn"}
                         data-key={n.key}
-                      ></img>
-                    </motion.button>
-                  );
-                })}
+                      >
+                        <img
+                          css={cardSizeCss}
+                          key={n.key + "p1"}
+                          src={n.image}
+                          alt={alt}
+                          data-key={n.key}
+                        ></img>
+                      </motion.button>
+                    );
+                  })}
+              </AnimatePresence>
             </motion.div>
           );
-        })}
+        })} */}
     </div>
   );
 }
