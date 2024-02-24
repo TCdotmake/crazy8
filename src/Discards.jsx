@@ -62,24 +62,23 @@ export function Discards() {
                   `,
                 ]}
               ></img>
+              {card.wild && (
+                <div
+                  css={[
+                    absCenterCss,
+                    stickyCss,
+                    css`
+                      z-index: 300;
+                    `,
+                  ]}
+                >
+                  <h3>Crazy 8!</h3>
+                  <p>{game.validCondition.suit}</p>
+                </div>
+              )}
             </div>
           );
         })}
-
-      {pile.length > 0 && game.wildTurn && (
-        <div
-          css={[
-            absCenterCss,
-            stickyCss,
-            css`
-              z-index: 300;
-            `,
-          ]}
-        >
-          <h3>Crazy 8!</h3>
-          <p>{game.validCondition.suit}</p>
-        </div>
-      )}
     </div>
   );
 }

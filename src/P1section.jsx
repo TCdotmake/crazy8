@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { GameContext } from "./GameProvider";
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
+import { motion } from "framer-motion";
 const style = css`
   width: 80px;
   height: auto;
@@ -18,6 +19,21 @@ const containerCss = css`
   justify-content: center;
   align-item: center;
 `;
+
+const initial = { opacity: 0 };
+const animate = { opacity: 1 };
+
+const staggerMotion = {
+  initial: {
+    opacity: 0,
+  },
+  animate: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 10,
+    },
+  },
+};
 
 export function P1section() {
   const ARRSIZE = 7;
@@ -49,57 +65,38 @@ export function P1section() {
         `,
       ]}
     >
-      {/* {pile.length > 0 &&
-        pile.map((n, index) => {
-          let alt = n.value + " of " + n.suit;
-          let mid = (pile.length - 1) / 2;
-          let offset = index - mid;
-          let margin = offset > 0 ? "marginLeft" : "marginRight";
-          let val = Math.abs(offset) * 20 * -1;
-
-          return (
-            <button
-              css={css`
-                transform: translateX(calc(-85px * ${offset}));
-              `}
-              onClick={handlePlay}
-              key={n.key + "btn"}
-              data-key={n.key}
-            >
-              <img
-                css={cardSizeCss}
-                key={n.key + "p1"}
-                src={n.image}
-                alt={alt}
-                data-key={n.key}
-              ></img>
-            </button>
-          );
-        })} */}
-
       {multiArr.length > 0 &&
-        multiArr.map((sub) => {
+        multiArr.map((sub, subInd) => {
+          const subZ = subInd * 100;
           return (
-            <div
+            <motion.div
               css={[
                 containerCss,
                 css`
                   margin-top: -110px;
+                  z-index: ${subZ};
                 `,
               ]}
+              variants={staggerMotion}
+              initial="initial"
+              animate="animate"
             >
               {sub.length > 0 &&
                 sub.map((n, index) => {
                   let alt = n.value + " of " + n.suit;
                   let mid = (sub.length - 1) / 2;
                   let offset = index - mid;
-                  let margin = offset > 0 ? "marginLeft" : "marginRight";
-                  let val = Math.abs(offset) * 20 * -1;
 
                   return (
-                    <button
+                    <motion.button
+                      initial={{ opacity: 0, y: 100 }}
+                      animate={{
+                        opacity: 1,
+                        y: 0,
+                        x: -80 * offset,
+                      }}
                       css={css`
-                        transform: translateX(calc(-80px * ${offset}));
+                        z-index: ${subZ + index};
                       `}
                       onClick={handlePlay}
                       key={n.key + "btn"}
@@ -112,10 +109,10 @@ export function P1section() {
                         alt={alt}
                         data-key={n.key}
                       ></img>
-                    </button>
+                    </motion.button>
                   );
                 })}
-            </div>
+            </motion.div>
           );
         })}
     </div>

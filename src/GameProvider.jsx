@@ -26,9 +26,8 @@ export function GameProvider({ children }) {
   const [p1Pile, setP1Pile] = useState([]);
   const [playerTurn, setPlayerTurn] = useState(true);
   const [solution, setSolution] = useState([]);
-  const [wildTurn, setWildTurn] = useState(false);
+
   const [p1choose, setp1choose] = useState(false);
-  const [p2choose, setp2choose] = useState(false);
   const [solutionRdy, setSolutionRdy] = useState(false);
   const [p2count, setp2count] = useState(0);
   const [p2show, setp2show] = useState(0);
@@ -100,9 +99,7 @@ export function GameProvider({ children }) {
       let result = validatePlay(card);
       p2PlayCard(key);
       setp2count(p2Ref.current.length);
-      if (wildTurn) {
-        setWildTurn(false);
-      }
+
       //check for win
       if (p2Ref.current.length == 0) {
         setActive(false);
@@ -115,7 +112,6 @@ export function GameProvider({ children }) {
             suit,
             wild: p1wild.current,
           });
-          setWildTurn(true);
         } else {
           updateValidCondition(nextTurn, card);
         }
@@ -244,7 +240,7 @@ export function GameProvider({ children }) {
       ...p2Ref.current,
     ]);
     p2Ref.current = [];
-    setWildTurn(false);
+
     setActive(false);
     setGameStart(false);
     setPlayerTurn(true);
@@ -294,9 +290,6 @@ export function GameProvider({ children }) {
         setp1choose(true);
       } else {
         playCard(card);
-        if (wildTurn) {
-          setWildTurn(false);
-        }
         setPlayerTurn(false);
         updateValidCondition(false, card);
       }
@@ -338,7 +331,6 @@ export function GameProvider({ children }) {
     });
     setp1choose(false);
     playCard(chosenCard.current);
-    setWildTurn(true);
     setPlayerTurn(false);
   }
 
@@ -423,14 +415,12 @@ export function GameProvider({ children }) {
     resetGame,
     newGame,
     p1PlayCard,
-    p2PlayCard,
     playerTurn,
     getCard,
     validatePlay,
     active,
     p1choose,
     p1setSuit,
-    wildTurn,
     validCondition,
     gameStart,
     p2Ref,
