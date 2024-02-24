@@ -41,10 +41,8 @@ export function GameProvider({ children }) {
   const [validCondition, setValidCondition] = useState({});
   const p1wild = useRef(null);
   const p2wild = useRef(null);
-  p1wild.current = "8";
-  p2wild.current = "8";
   const p2Ref = useRef(null);
-
+  const chosenCard = useRef(null);
   // END REFS
 
   // useEffect hooks
@@ -221,6 +219,8 @@ export function GameProvider({ children }) {
 
   function newGame() {
     setTimeout(() => {
+      p1wild.current = "8";
+      p2wild.current = "8";
       let initialCount = 7;
       dealToDiscard();
       dealToP1(initialCount);
@@ -263,57 +263,56 @@ export function GameProvider({ children }) {
   function getCard(key, player) {
     return player[getIndex(key, player)];
   }
-  function playCard(key, player, setFn) {
+  function playCard(card) {
     //get index
-    let index = getIndex(key, player);
+    let index = getIndex(card.key, p1Pile);
     if (index != -1) {
-      let copy = structuredClone(player);
+      let copy = structuredClone(p1Pile);
       let card = copy.splice(index, 1)[0];
-      setFn([...copy]);
+      if (card.value == validCondition.wild) {
+        card.wild = true;
+      } else {
+        card.wild = false;
+      }
+      setP1Pile([...copy]);
       setDiscardPile((prev) => {
         return [...prev, card];
       });
     }
   }
-  function playerPlayCard(player, setFn, key) {
-    let card = getCard(key, player);
+  function p1PlayCard(key) {
+    let card = getCard(key, p1Pile);
     let result = validatePlay(card);
-    let nextTurn = !playerTurn;
     if (result != FAILED) {
-      let cardCount = player.length;
-      playCard(key, player, setFn);
-      if (wildTurn) {
-        setWildTurn(false);
-      }
+      chosenCard.current = card;
+      let cardCount = p1Pile.length;
       if (cardCount == 1) {
-        if (playerTurn) {
-          console.log("p1 Win!");
-        } else {
-          console.log("p2 Win!");
-        }
+        playCard(card);
+        console.log("p1 Win!");
         setActive(false);
+      } else if (result == WILD) {
+        setp1choose(true);
       } else {
-        if (result == WILD) {
-          if (playerTurn) {
-            setp1choose(true);
-          } else {
-            setp2choose(true);
-          }
-        } else {
-          setPlayerTurn(nextTurn);
-          updateValidCondition(nextTurn, card);
+        playCard(card);
+        if (wildTurn) {
+          setWildTurn(false);
         }
+        setPlayerTurn(false);
+        updateValidCondition(false, card);
       }
     }
   }
-  function p1PlayCard(key) {
-    playerPlayCard(p1Pile, setP1Pile, key);
-  }
+
   function p2PlayCard(key) {
     let index = getIndex(key, p2Ref.current);
     if (index != -1) {
       let copy = p2Ref.current;
       let card = copy.splice(index, 1)[0];
+      if (card.value == validCondition.wild) {
+        card.wild = true;
+      } else {
+        card.wild = false;
+      }
       setDiscardPile((prev) => {
         return [...prev, card];
       });
@@ -338,6 +337,7 @@ export function GameProvider({ children }) {
       wild: p2wild.current,
     });
     setp1choose(false);
+    playCard(chosenCard.current);
     setWildTurn(true);
     setPlayerTurn(false);
   }

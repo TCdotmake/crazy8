@@ -46,6 +46,7 @@ export function Discards() {
         pile.map((card) => {
           return (
             <div
+              key={`${card.key}div`}
               css={css`
                 z-index: 200;
               `}
