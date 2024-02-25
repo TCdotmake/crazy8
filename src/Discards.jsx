@@ -49,6 +49,8 @@ export function Discards() {
               key={`${card.key}div`}
               css={css`
                 z-index: 200;
+                display: grid;
+                place-items: center;
               `}
             >
               <img
@@ -59,6 +61,7 @@ export function Discards() {
                   cardSizeCss,
                   css`
                     ${card.disCss}
+                    grid-area: 0/0/1/1;
                   `,
                 ]}
               ></img>
@@ -68,7 +71,9 @@ export function Discards() {
                     absCenterCss,
                     stickyCss,
                     css`
+                      ${card.disCss}
                       z-index: 300;
+                      grid-area: 0/0/1/1;
                     `,
                   ]}
                 >
