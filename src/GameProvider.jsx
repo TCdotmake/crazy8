@@ -25,23 +25,22 @@ export function GameProvider({ children }) {
   const [discardPile, setDiscardPile] = useState([]);
   const [p1Pile, setP1Pile] = useState([]);
   const [playerTurn, setPlayerTurn] = useState(true);
-  const [solution, setSolution] = useState([]);
-
   const [p1choose, setp1choose] = useState(false);
   const [solutionRdy, setSolutionRdy] = useState(false);
   const [p2count, setp2count] = useState(0);
   const [p2show, setp2show] = useState(0);
+  const [validCondition, setValidCondition] = useState({});
   // END STATES
 
   // REFS
   const deckCountRef = useRef(null);
   const deckRef = useRef(null);
   deckCountRef.current = 1;
-  const [validCondition, setValidCondition] = useState({});
   const p1wild = useRef(null);
   const p2wild = useRef(null);
   const p2Ref = useRef(null);
   const chosenCard = useRef(null);
+  const solutionRef = useRef(null);
   // END REFS
 
   // useEffect hooks
@@ -95,8 +94,8 @@ export function GameProvider({ children }) {
 
   useEffect(() => {
     if (p2count == p2show && solutionRdy) {
-      let key = solution[0].key;
-      let card = solution[0];
+      let key = solutionRef.current[0].key;
+      let card = solutionRef.current[0];
       let nextTurn = !playerTurn;
       let result = validatePlay(card);
       p2PlayCard(key);
@@ -120,7 +119,7 @@ export function GameProvider({ children }) {
         setPlayerTurn(true);
       }
       setSolutionRdy(false);
-      setSolution([]);
+      solutionRef.current = [];
     }
   }, [p2count, p2show, solutionRdy]);
 
@@ -400,7 +399,7 @@ export function GameProvider({ children }) {
       attempt = createSolution();
     }
     if (attempt.length > 0) {
-      setSolution([...attempt]);
+      solutionRef.current = [...attempt];
       setSolutionRdy(true);
       setp2count(p2Ref.current.length);
     }
