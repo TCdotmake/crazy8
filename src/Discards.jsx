@@ -4,7 +4,7 @@ import { GameContext } from "./GameProvider";
 import { css } from "@emotion/react";
 import { cardSizeCss } from "./P1section";
 import { absCenterCss } from "./Mid";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, delay, motion } from "framer-motion";
 
 const stickyCss = css`
   background: orchid;
@@ -44,12 +44,16 @@ export function Discards() {
       </p>
       <AnimatePresence>
         {pile.length > 0 &&
-          pile.map((card) => {
+          pile.map((card, index) => {
             return (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
+                exit={{
+                  opacity: 0,
+                  x: -50,
+                  transition: { delay: index * 0.05 },
+                }}
                 key={`${card.key}div`}
                 css={css`
                   z-index: 200;
