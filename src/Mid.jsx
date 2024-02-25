@@ -4,8 +4,9 @@ import { GameContext } from "./GameProvider";
 import { css } from "@emotion/react";
 import { Discards } from "./Discards";
 import { ChooseSuit } from "./ChooseSuit";
-import { cardSizeCss } from "./P1section";
+import { P1section, cardSizeCss } from "./P1section";
 import { Deck } from "./Deck";
+import { Rules } from "./Rules";
 
 const flexRow = css`
   display: flex;
@@ -43,10 +44,16 @@ export function Mid() {
   return (
     <div>
       <div css={[flexRow, deckContainerCss]}>
-        <Deck></Deck>
-        <Discards></Discards>
+        {game.gameStart && game.active && (
+          <>
+            <Deck></Deck>
+            <Discards></Discards>
+          </>
+        )}
       </div>
       {game.p1choose && <ChooseSuit></ChooseSuit>}
+      {game.gameStart && game.active && <P1section></P1section>}
+      {!game.gameStart && !game.active && <Rules></Rules>}
     </div>
   );
 }

@@ -2,12 +2,13 @@ import { useContext, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import { GameProvider } from "./GameProvider";
+import { GameContext, GameProvider } from "./GameProvider";
 import { P1section } from "./P1section";
 import { Top } from "./Top";
 import { Mid } from "./Mid";
 import "./App.css";
 function App() {
+  let game = useContext(GameContext);
   return (
     <GameProvider>
       <header
@@ -23,7 +24,6 @@ function App() {
       <main>
         <Top></Top>
         <Mid></Mid>
-        <P1section></P1section>
       </main>
     </GameProvider>
   );
