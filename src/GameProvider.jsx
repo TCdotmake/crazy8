@@ -70,7 +70,9 @@ export function GameProvider({ children }) {
 
   useEffect(() => {
     if (!playerTurn) {
-      p2TurnAction();
+      setTimeout(() => {
+        p2TurnAction();
+      }, 700);
     }
   }, [playerTurn]);
 

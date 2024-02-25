@@ -4,6 +4,7 @@ import { GameContext } from "./GameProvider";
 import { css } from "@emotion/react";
 import { cardSizeCss } from "./P1section";
 import { absCenterCss } from "./Mid";
+import { AnimatePresence, motion } from "framer-motion";
 
 const stickyCss = css`
   background: orchid;
@@ -36,54 +37,66 @@ export function Discards() {
     <div>
       <p
         css={css`
-          z-index: 100;
+          z-index: 0;
         `}
       >
         Discards
       </p>
-
-      {pile.length > 0 &&
-        pile.map((card) => {
-          return (
-            <div
-              key={`${card.key}div`}
-              css={css`
-                z-index: 200;
-                display: grid;
-                place-items: center;
-              `}
-            >
-              <img
-                src={card.image}
-                alt={`${card.value} of ${card.suit}`}
-                key={`${card.key}dis`}
-                css={[
-                  cardSizeCss,
-                  css`
-                    ${card.disCss}
-                    grid-area: 0/0/1/1;
-                  `,
-                ]}
-              ></img>
-              {card.wild && (
+      <AnimatePresence>
+        {pile.length > 0 &&
+          pile.map((card) => {
+            return (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                key={`${card.key}div`}
+                css={css`
+                  z-index: 200;
+                  display: grid;
+                  justify-content: center;
+                  align-items: center;
+                `}
+              >
                 <div
                   css={[
-                    absCenterCss,
-                    stickyCss,
+                    card.disCss,
                     css`
-                      ${card.disCss}
-                      z-index: 300;
-                      grid-area: 0/0/1/1;
+                      position: relative;
                     `,
                   ]}
                 >
-                  <h3>Crazy 8!</h3>
-                  <p>{game.validCondition.suit}</p>
+                  <img
+                    src={card.image}
+                    alt={`${card.value} of ${card.suit}`}
+                    key={`${card.key}dis`}
+                    css={[
+                      cardSizeCss,
+                      css`
+                        z-index: 200;
+                        ${absCenterCss}
+                      `,
+                    ]}
+                  ></img>
+                  {card.wild && (
+                    <div
+                      css={[
+                        absCenterCss,
+                        stickyCss,
+                        css`
+                          z-index: 300;
+                        `,
+                      ]}
+                    >
+                      <h3>Crazy 8!</h3>
+                      <p>{game.validCondition.suit}</p>
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-          );
-        })}
+              </motion.div>
+            );
+          })}
+      </AnimatePresence>
     </div>
   );
 }
