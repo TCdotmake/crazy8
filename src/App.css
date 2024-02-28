@@ -9,4 +9,13 @@
   font-size: 16px;
   --card-width: 110px;
   --card-height: calc(var(--card-width) * 1.39);
+  --dark-bg: #353a47;
+  --dark-font: #28221f;
+  --off-white: #f4fff8;
+  --light-red: #ff7261;
+  --glow-color: rgb(255, 13, 0);
+}
+
+body {
+  background: var(--dark-bg);
 }

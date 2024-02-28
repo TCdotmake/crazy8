@@ -7,6 +7,24 @@ import { P1section } from "./P1section";
 import { Top } from "./Top";
 import { Mid } from "./Mid";
 import "./App.css";
+
+const headerFont = css`
+  font-family: "Julius Sans One", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  color: var(--off-white);
+  font-size: 4rem;
+`;
+
+const glowCss = css`
+  text-shadow: 1px 1px 0 var(--off-white), -1px -1px 0 var(--off-white);
+`;
+
+const suitsCss = css`
+  font-size: 2.5rem;
+  color: var(--light-red);
+`;
+
 function App() {
   let game = useContext(GameContext);
   return (
@@ -14,12 +32,36 @@ function App() {
       <header
         css={css`
           display: flex;
-          flex-direction: row;
+          flex-direction: column;
           justify-content: center;
           align-items: center;
+          margin: 3.5rem auto;
         `}
       >
-        <h1>Crazy 8s!</h1>
+        <h1 css={headerFont}>
+          Crazy{" "}
+          <span
+            css={css`
+              color: var(--light-red);
+              font-size: 4.5rem;
+            `}
+          >
+            8
+          </span>
+          S
+        </h1>
+        {/* <p
+          css={[
+            suitsCss,
+            css`
+              width: 271px;
+              text-align: end;
+              line-height: 50%;
+            `,
+          ]}
+        >
+          ♠<span>♦</span>♣<span>♥</span>
+        </p> */}
       </header>
       <main>
         <Top></Top>
