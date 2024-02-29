@@ -15,7 +15,9 @@ export function Deck() {
       <p
         css={css`
           z-index: 100;
+          color: var(--off-white);
         `}
+        className="julius-sans"
       >
         Deck
       </p>

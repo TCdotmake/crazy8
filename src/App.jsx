@@ -9,9 +9,6 @@ import { Mid } from "./Mid";
 import "./App.css";
 
 const headerFont = css`
-  font-family: "Julius Sans One", sans-serif;
-  font-weight: 400;
-  font-style: normal;
   color: var(--off-white);
   font-size: 4rem;
 `;
@@ -38,7 +35,7 @@ function App() {
           margin: 3.5rem auto;
         `}
       >
-        <h1 css={headerFont}>
+        <h1 css={headerFont} className="julius-sans">
           Crazy{" "}
           <span
             css={css`

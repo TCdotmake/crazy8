@@ -37,8 +37,10 @@ export function Discards() {
     <div>
       <p
         css={css`
-          z-index: 0;
+          z-index: 100;
+          color: var(--off-white);
         `}
+        className="julius-sans"
       >
         Discards
       </p>

@@ -59,6 +59,7 @@ export function P1section() {
       css={[
         containerCss,
         css`
+          margin-top: 2rem;
           flex-direction: column;
           > *:first-child {
             margin-top: 0;
@@ -109,58 +110,6 @@ export function P1section() {
           </AnimatePresence>
         </div>
       )}
-
-      {/* {multiArr.length > 0 &&
-        multiArr.map((sub, subInd) => {
-          const subZ = subInd * 100;
-          return (
-            <motion.div
-              css={[
-                containerCss,
-                css`
-                  margin-top: -110px;
-                  z-index: ${subZ};
-                `,
-              ]}
-            >
-              <AnimatePresence>
-                {sub.length > 0 &&
-                  sub.map((n, index) => {
-                    let alt = n.value + " of " + n.suit;
-                    let mid = (sub.length - 1) / 2;
-                    let offset = index - mid;
-
-                    return (
-                      <motion.button
-                        initial={{ opacity: 0, y: 100 }}
-                        animate={{
-                          opacity: 1,
-                          y: 0,
-                          x: -80 * offset,
-                        }}
-                        exit={{ opacity: 0, y: -100, x: -80 * offset }}
-                        css={css`
-                          z-index: ${subZ + index};
-
-                        `}
-                        onClick={handlePlay}
-                        key={n.key + "btn"}
-                        data-key={n.key}
-                      >
-                        <img
-                          css={cardSizeCss}
-                          key={n.key + "p1"}
-                          src={n.image}
-                          alt={alt}
-                          data-key={n.key}
-                        ></img>
-                      </motion.button>
-                    );
-                  })}
-              </AnimatePresence>
-            </motion.div>
-          );
-        })} */}
     </div>
   );
 }

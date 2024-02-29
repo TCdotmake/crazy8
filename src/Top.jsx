@@ -8,6 +8,29 @@ const flexRow = css`
   justify-content: center;
   align-items: center;
 `;
+
+const buttonCss = css`
+  border: 1px solid var(--off-white);
+  border-radius: 5px;
+  padding: 0.5ch;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  color: var(--off-white);
+`;
+
+const navBarCss = css`
+  width: 298px;
+  justify-content: flex-start;
+  gap: 1ch;
+  & button {
+    ${buttonCss}
+  }
+  & button:nth-child(2) {
+    margin-left: auto;
+  }
+`;
+
 export function Top() {
   const game = useContext(GameContext);
   const [active, setActive] = useState(false);
@@ -21,8 +44,15 @@ export function Top() {
   };
 
   return (
-    <div css={flexRow}>
-      <button onClick={handleClick}>{(active && "Reset") || "New Game"}</button>
+    <div>
+      {" "}
+      <div css={[flexRow, navBarCss]}>
+        <button onClick={handleClick}>
+          {(active && "Reset") || "New Game"}
+        </button>
+        <button onClick={game.toggleRules}>Rules</button>
+        <button>GitHub</button>
+      </div>{" "}
       <p>{`CPU X ${game.p2show}`}</p>
     </div>
   );

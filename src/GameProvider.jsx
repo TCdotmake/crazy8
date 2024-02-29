@@ -30,6 +30,7 @@ export function GameProvider({ children }) {
   const [p2count, setp2count] = useState(0);
   const [p2show, setp2show] = useState(0);
   const [validCondition, setValidCondition] = useState({});
+  const [showRules, setShowRules] = useState(false);
   // END STATES
 
   // REFS
@@ -126,6 +127,10 @@ export function GameProvider({ children }) {
   // END useEffect hooks
 
   // helper functions
+
+  const toggleRules = () => {
+    setShowRules((prev) => !prev);
+  };
 
   function updatep2Ref(cards) {
     if (p2Ref.current == null) {
@@ -426,6 +431,8 @@ export function GameProvider({ children }) {
     gameStart,
     p2Ref,
     p2show,
+    toggleRules,
+    showRules,
   };
 
   return <GameContext.Provider value={game}>{children}</GameContext.Provider>;

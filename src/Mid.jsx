@@ -13,6 +13,7 @@ const flexRow = css`
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  gap: 1rem;
 `;
 
 export const absCenterCss = css`
@@ -26,7 +27,8 @@ const deckContainerCss = css`
   > * {
     width: calc(var(--card-width) + 30px);
     height: calc(var(--card-height) + 34px);
-    border: 1px solid red;
+    border: 3px solid var(--off-white);
+    border-radius: 10px;
     position: relative;
     > * {
       ${absCenterCss}
@@ -44,7 +46,7 @@ export function Mid() {
   return (
     <div>
       <div css={[flexRow, deckContainerCss]}>
-        {game.gameStart && game.active && (
+        {!game.showRules && (
           <>
             <Deck></Deck>
             <Discards></Discards>
@@ -52,8 +54,8 @@ export function Mid() {
         )}
       </div>
       {game.p1choose && <ChooseSuit></ChooseSuit>}
-      {game.gameStart && game.active && <P1section></P1section>}
-      {!game.gameStart && !game.active && <Rules></Rules>}
+      {!game.showRules && <P1section></P1section>}
+      {game.showRules && <Rules></Rules>}
     </div>
   );
 }
