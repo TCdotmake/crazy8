@@ -53,7 +53,6 @@ export function Top() {
         <button onClick={game.toggleRules}>Rules</button>
         <button>GitHub</button>
       </div>{" "}
-      <p>{`CPU X ${game.p2show}`}</p>
     </div>
   );
 }

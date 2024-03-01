@@ -32,7 +32,7 @@ function App() {
           flex-direction: column;
           justify-content: center;
           align-items: center;
-          margin: 3.5rem auto;
+          margin: 3.5rem auto 2rem auto;
         `}
       >
         <h1 css={headerFont} className="julius-sans">
@@ -60,7 +60,13 @@ function App() {
           ♠<span>♦</span>♣<span>♥</span>
         </p> */}
       </header>
-      <main>
+      <main
+        css={css`
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        `}
+      >
         <Top></Top>
         <Mid></Mid>
       </main>

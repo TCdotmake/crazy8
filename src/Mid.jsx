@@ -36,6 +36,30 @@ const deckContainerCss = css`
   }
 `;
 
+const cardIconCss = css`
+  width: 20px;
+  aspect-ratio: 2.5/3.5;
+  border: 3px solid var(--off-white);
+  border-radius: 5px;
+`;
+
+const counterContainerCss = css`
+  margin: 1rem 0;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: 1ch;
+  align-items: center;
+  > p {
+    color: var(--off-white);
+    font-family: "Lato", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 1.5rem;
+  }
+`;
+
 export function Mid() {
   const game = useContext(GameContext);
   const handleDraw = () => {
@@ -45,6 +69,14 @@ export function Mid() {
   };
   return (
     <div>
+      {!game.showRules && (
+        <div css={counterContainerCss}>
+          <p>CPU </p>
+          <div css={cardIconCss}></div>
+          <p>x</p>
+          <p>{game.p2show}</p>
+        </div>
+      )}
       <div css={[flexRow, deckContainerCss]}>
         {!game.showRules && (
           <>
