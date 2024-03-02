@@ -2,8 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import { GameContext, GameProvider } from "./GameProvider";
-import { P1section } from "./P1section";
+import { GameProvider } from "./GameProvider";
 import { Top } from "./Top";
 import { Mid } from "./Mid";
 import "./App.css";
@@ -23,7 +22,6 @@ const suitsCss = css`
 `;
 
 function App() {
-  let game = useContext(GameContext);
   return (
     <GameProvider>
       <header
@@ -47,19 +45,8 @@ function App() {
           </span>
           S
         </h1>
-        {/* <p
-          css={[
-            suitsCss,
-            css`
-              width: 271px;
-              text-align: end;
-              line-height: 50%;
-            `,
-          ]}
-        >
-          ♠<span>♦</span>♣<span>♥</span>
-        </p> */}
       </header>
+
       <main
         css={css`
           display: flex;

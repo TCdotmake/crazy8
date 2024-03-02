@@ -24,7 +24,7 @@ export const absCenterCss = css`
 `;
 
 const deckContainerCss = css`
-  > * {
+  > div {
     width: calc(var(--card-width) + 30px);
     height: calc(var(--card-height) + 34px);
     border: 3px solid var(--off-white);
@@ -37,7 +37,7 @@ const deckContainerCss = css`
 `;
 
 const cardIconCss = css`
-  width: 20px;
+  width: 18px;
   aspect-ratio: 2.5/3.5;
   border: 3px solid var(--off-white);
   border-radius: 5px;
@@ -45,7 +45,7 @@ const cardIconCss = css`
 
 const counterContainerCss = css`
   margin: 1rem 0;
-  width: 100%;
+
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
@@ -68,24 +68,37 @@ export function Mid() {
     }
   };
   return (
-    <div>
+    <div
+      css={css`
+        position: relative;
+      `}
+    >
       {!game.showRules && (
         <div css={counterContainerCss}>
           <p>CPU </p>
           <div css={cardIconCss}></div>
-          <p>x</p>
+          <p>X</p>
           <p>{game.p2show}</p>
         </div>
       )}
-      <div css={[flexRow, deckContainerCss]}>
+      <div
+        css={[
+          flexRow,
+          deckContainerCss,
+          css`
+            position: relative;
+          `,
+        ]}
+      >
         {!game.showRules && (
           <>
+            {game.p1choose && <ChooseSuit></ChooseSuit>}
             <Deck></Deck>
             <Discards></Discards>
           </>
         )}
       </div>
-      {game.p1choose && <ChooseSuit></ChooseSuit>}
+
       {!game.showRules && <P1section></P1section>}
       {game.showRules && <Rules></Rules>}
     </div>

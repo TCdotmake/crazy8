@@ -6,6 +6,10 @@
   background: none;
   max-width: 100vw;
   box-sizing: border-box;
+  font-family: "Julius Sans One", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 16px;
 }
 
 :root {
@@ -14,7 +18,8 @@
   --card-height: calc(var(--card-width) * 1.39);
   --dark-bg: #353a47;
   --dark-font: #28221f;
-  --off-white: #f4fff8;
+  --off-white: #e4ffee;
+  --off-white-trans: #f4fff8b6;
   --light-red: #ff7261;
   --glow-color: rgb(255, 13, 0);
 }

@@ -208,6 +208,7 @@ export function GameProvider({ children }) {
   function dealToDiscard(n = 1) {
     //get the first card
     const card = structuredClone(deckRef.current[0]);
+    card.wild = false;
     //set conditions
 
     updateValidCondition(true, card);
