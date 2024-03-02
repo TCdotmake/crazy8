@@ -7,6 +7,7 @@ import { ChooseSuit } from "./ChooseSuit";
 import { P1section, cardSizeCss } from "./P1section";
 import { Deck } from "./Deck";
 import { Rules } from "./Rules";
+import { WinMsg } from "./WinMsg";
 
 const flexRow = css`
   display: flex;
@@ -44,7 +45,7 @@ const cardIconCss = css`
 `;
 
 const counterContainerCss = css`
-  margin: 1rem 0;
+  margin: 1rem 0 0.5rem 0;
 
   display: flex;
   flex-direction: row;
@@ -92,6 +93,7 @@ export function Mid() {
       >
         {!game.showRules && (
           <>
+            {game.winner && <WinMsg></WinMsg>}
             {game.p1choose && <ChooseSuit></ChooseSuit>}
             <Deck></Deck>
             <Discards></Discards>

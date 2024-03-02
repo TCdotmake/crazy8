@@ -9,7 +9,8 @@ const flexRow = css`
   align-items: center;
 `;
 
-const buttonCss = css`
+export const buttonCss = css`
+  height: 32px;
   border: 1px solid var(--off-white);
   border-radius: 5px;
   padding: 0.5ch;

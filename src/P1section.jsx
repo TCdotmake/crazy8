@@ -3,6 +3,7 @@ import { GameContext } from "./GameProvider";
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 import { AnimatePresence, motion } from "framer-motion";
+import { buttonCss } from "./Top";
 const style = css`
   width: 80px;
   height: auto;
@@ -67,6 +68,35 @@ export function P1section() {
         `,
       ]}
     >
+      {pile.length > 0 && (
+        <div
+          css={css`
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: 1ch;
+            margin-bottom: 1ch;
+            > * {
+              ${buttonCss}
+            }
+            > button {
+              width: 48px;
+            }
+          `}
+        >
+          <p
+            css={css`
+              border: none;
+              padding: 0.5ch 0;
+            `}
+          >
+            Sort:
+          </p>
+          <button onClick={game.sortBySuit}>Suit</button>
+          <button onClick={game.sortByRank}>Rank</button>
+        </div>
+      )}
       {pile.length > 0 && (
         <div
           css={css`

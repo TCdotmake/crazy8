@@ -31,6 +31,7 @@ export function GameProvider({ children }) {
   const [p2show, setp2show] = useState(0);
   const [validCondition, setValidCondition] = useState({});
   const [showRules, setShowRules] = useState(false);
+  const [winner, setWinner] = useState(null);
   // END STATES
 
   // REFS
@@ -51,6 +52,32 @@ export function GameProvider({ children }) {
     loadDeck(deckCountRef, setDeck);
   }, []);
 
+  function setNum(n) {
+    if (n.value == "ACE") {
+      n.num = 14;
+    } else if (n.value == "KING") {
+      n.num = 13;
+    } else if (n.value == "QUEEN") {
+      n.num = 12;
+    } else if (n.value == "JACK") {
+      n.num = 11;
+    } else {
+      n.num = parseInt(n.value);
+    }
+  }
+
+  function setSuitVal(n) {
+    if (n.suit == "SPADES") {
+      n.suitVal = 1;
+    } else if (n.suit == "DIAMONDS") {
+      n.suitVal = 2;
+    } else if (n.suit == "CLUBS") {
+      n.suitVal = 3;
+    } else {
+      n.suitVal = 4;
+    }
+  }
+
   useEffect(() => {
     const maxDeg = 50;
     const maxPx = 20;
@@ -58,6 +85,8 @@ export function GameProvider({ children }) {
       deckRef.current = [...deck];
       deckRef.current.forEach((n) => {
         n.key = uuid();
+        setNum(n);
+        setSuitVal(n);
         let deg = Math.round(Math.random() * maxDeg - maxDeg / 2);
         let pxx = Math.round(Math.random() * maxPx - maxPx / 2);
         let pxy = Math.round(Math.random() * maxPx - maxPx / 2);
@@ -105,7 +134,7 @@ export function GameProvider({ children }) {
       //check for win
       if (p2Ref.current.length == 0) {
         setActive(false);
-        console.log("p2 Win!");
+        setWinner(2);
       } else {
         if (result == WILD) {
           let suit = chooseSuit();
@@ -247,7 +276,7 @@ export function GameProvider({ children }) {
       ...p2Ref.current,
     ]);
     p2Ref.current = [];
-
+    setWinner(null);
     setActive(false);
     setGameStart(false);
     setPlayerTurn(true);
@@ -291,7 +320,7 @@ export function GameProvider({ children }) {
       let cardCount = p1Pile.length;
       if (cardCount == 1) {
         playCard(card);
-        console.log("p1 Win!");
+        setWinner(1);
         setActive(false);
       } else if (result == WILD) {
         setp1choose(true);
@@ -340,6 +369,22 @@ export function GameProvider({ children }) {
     playCard(chosenCard.current);
     setPlayerTurn(false);
   }
+
+  const sortByRank = () => {
+    let copy = structuredClone(p1Pile);
+    copy.sort((a, b) => {
+      return b.num - a.num;
+    });
+    setP1Pile([...copy]);
+  };
+
+  const sortBySuit = () => {
+    let copy = structuredClone(p1Pile);
+    copy.sort((a, b) => {
+      return a.suitVal - b.suitVal;
+    });
+    setP1Pile([...copy]);
+  };
 
   function chooseSuit() {
     let copy = structuredClone(p2Ref.current);
@@ -434,6 +479,9 @@ export function GameProvider({ children }) {
     p2show,
     toggleRules,
     showRules,
+    sortByRank,
+    sortBySuit,
+    winner,
   };
 
   return <GameContext.Provider value={game}>{children}</GameContext.Provider>;

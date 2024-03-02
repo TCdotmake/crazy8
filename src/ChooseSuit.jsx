@@ -11,10 +11,16 @@ const iconCss = css`
   color: var(--light-red);
 `;
 
-const containerCss = css`
+export const containerCss = css`
   background: var(--off-white);
 
   z-index: 1000;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem 0;
   > p {
     font-size: 1.5rem;
   }
@@ -36,20 +42,7 @@ const suitDivCss = css`
 export function ChooseSuit() {
   const game = useContext(GameContext);
   return (
-    <span
-      css={[
-        containerCss,
-        absCenterCss,
-        css`
-          width: 100vw;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          padding: 1rem 0;
-        `,
-      ]}
-    >
+    <span css={[containerCss, absCenterCss]}>
       <p>Choose a suit:</p>
       <div css={suitDivCss}>
         <button
