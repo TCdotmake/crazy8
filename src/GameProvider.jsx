@@ -32,7 +32,7 @@ export function GameProvider({ children }) {
   const [validCondition, setValidCondition] = useState({});
   const [showRules, setShowRules] = useState(false);
   const [winner, setWinner] = useState(null);
-  const [queenSkip, setQueenSkip] = useState(false);
+  const [queenSkip, setQueenSkip] = useState(true);
   const [twoDraw, setTwoDraw] = useState(false);
 
   // END STATES
@@ -150,6 +150,12 @@ export function GameProvider({ children }) {
             suit,
             wild: p1wild.current,
           });
+        } else if (queenSkip && card.value == "QUEEN") {
+          //play another card
+          setSolutionRdy(false);
+          setTimeout(() => {
+            p2TurnAction();
+          }, 700);
         } else {
           updateValidCondition(nextTurn, card);
         }
