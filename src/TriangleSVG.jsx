@@ -1,3 +1,6 @@
+/** @jsxImportSource @emotion/react */
+import { css } from "@emotion/react";
+
 export function TriangleSVG() {
   return (
     <svg
@@ -6,6 +9,9 @@ export function TriangleSVG() {
       viewBox="0 0 16 16"
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
+      css={css`
+        rotate: 180deg;
+      `}
     >
       <g id="SVGRepo_bgCarrier" stroke-width="0" />
 

@@ -40,8 +40,13 @@ export function Deck() {
         <p
           css={css`
             z-index: 300;
-            color: white;
-            background: grey;
+            color: var(--off-white);
+            font-size: 1.5rem;
+            background: var(--dark-bg);
+            padding: 0.5rem;
+            border-radius: 5px;
+            border: 2px solid var(--off-white);
+            box-shadow: 0 0 5px var(--dark-bg);
           `}
           onClick={handleDraw}
         >

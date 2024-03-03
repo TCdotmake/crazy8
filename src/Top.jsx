@@ -51,7 +51,18 @@ export function Top() {
         <button onClick={handleClick}>
           {(active && "Reset") || "New Game"}
         </button>
-        <button onClick={game.toggleRules}>Rules</button>
+        <button
+          onClick={game.toggleRules}
+          css={
+            game.showRules &&
+            css`
+              background: var(--off-white);
+              color: var(--dark-bg) !important;
+            `
+          }
+        >
+          Rules
+        </button>
         <button>GitHub</button>
       </div>{" "}
     </div>
