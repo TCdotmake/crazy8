@@ -13,7 +13,7 @@ export const buttonCss = css`
   height: 32px;
   border: 1px solid var(--off-white);
   border-radius: 5px;
-  padding: 0.5ch;
+  padding: 0.5ch 1ch;
   font-family: "Lato", sans-serif;
   font-weight: 400;
   font-style: normal;

@@ -136,8 +136,6 @@ export function Rules() {
 
   return (
     <div css={[fontsCss, containerCss]} className="lato-light">
-      <h2>Rules</h2>
-
       <RuleSection title={setupTitle} content={setupContent}></RuleSection>
       <RuleSection title={howTitle} content={howContent}></RuleSection>
       <RuleSection
