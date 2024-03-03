@@ -375,6 +375,9 @@ export function GameProvider({ children }) {
   const sortByRank = () => {
     let copy = structuredClone(p1Pile);
     copy.sort((a, b) => {
+      return a.suitVal - b.suitVal;
+    });
+    copy.sort((a, b) => {
       return b.num - a.num;
     });
     setP1Pile([...copy]);
@@ -382,6 +385,9 @@ export function GameProvider({ children }) {
 
   const sortBySuit = () => {
     let copy = structuredClone(p1Pile);
+    copy.sort((a, b) => {
+      return b.num - a.num;
+    });
     copy.sort((a, b) => {
       return a.suitVal - b.suitVal;
     });
