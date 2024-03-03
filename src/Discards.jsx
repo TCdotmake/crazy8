@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { GameContext } from "./GameProvider";
+import { CLUBS, DIAMONDS, GameContext, SPADES } from "./GameProvider";
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 import { cardSizeCss } from "./P1section";
@@ -7,21 +7,86 @@ import { absCenterCss } from "./Mid";
 import { AnimatePresence, delay, motion } from "framer-motion";
 
 const stickyCss = css`
-  background: orchid;
-  width: 50px;
-  height: 50px;
+  background: #fff8f0;
+  width: 85px;
+  aspect-ratio: 1/1;
   z-index: 500;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 0.5rem;
+  overflow: hidden;
+  clip-path: polygon(
+    0 20%,
+    20% 0,
+    100% 0,
+    100% 0,
+    100% 100%,
+    100% 100%,
+    0 100%,
+    0 100%,
+    0% 20%
+  );
+
   > h3 {
-    font-size: 12px;
+    font-family: "Lato", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+    font-size: 0.8rem;
   }
   > p {
-    font-size: 8px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+    font-size: 2.5rem;
+    line-height: 70%;
   }
 `;
+
+function getSuit(suit) {
+  let result = "♥";
+  if (suit == SPADES) {
+    result = "♠";
+  } else if (suit == DIAMONDS) {
+    result = "♦";
+  } else if (suit == CLUBS) {
+    result = "♣";
+  }
+  let color = css`
+    color: var(--off-white);
+    background: var(--dark-bg);
+  `;
+  if (result == "♦" || result == "♥") {
+    color = css`
+      color: white;
+      background: var(--light-red);
+    `;
+  }
+  return (
+    <div
+      css={[
+        absCenterCss,
+        css`
+          z-index: 300;
+          filter: drop-shadow(0 0 8px var(--dark-bg));
+        `,
+      ]}
+    >
+      <div
+        css={[
+          stickyCss,
+          color,
+          css`
+            transform: rotate(5deg);
+          `,
+        ]}
+      >
+        <h3>Crazy 8!</h3>
+        <p>{result}</p>
+      </div>
+    </div>
+  );
+}
 
 export function Discards() {
   const game = useContext(GameContext);
@@ -32,7 +97,6 @@ export function Discards() {
     topCard = pile[pile.length - 1];
     alt = topCard.value + " of " + topCard.suit;
   }
-
   return (
     <div>
       <p
@@ -84,20 +148,8 @@ export function Discards() {
                       `,
                     ]}
                   ></img>
-                  {card.wild && (
-                    <div
-                      css={[
-                        absCenterCss,
-                        stickyCss,
-                        css`
-                          z-index: 300;
-                        `,
-                      ]}
-                    >
-                      <h3>Crazy 8!</h3>
-                      <p>{game.validCondition.suit}</p>
-                    </div>
-                  )}
+
+                  {card.wild && getSuit(game.validCondition.suit)}
                 </div>
               </motion.div>
             );

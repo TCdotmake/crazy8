@@ -26,6 +26,14 @@ const sectionContainer = css`
   border-radius: 20px;
   padding: 2ch;
   margin-bottom: 0.75rem;
+  > span {
+    display: flex;
+    flex-direction: row;
+    align-items: start;
+    gap: 1ch;
+    margin-top: 1rem;
+  }
+
   > div {
     display: flex;
     flex-direction: row;
@@ -46,13 +54,18 @@ const sectionContainer = css`
     margin-top: 0.5rem;
   }
 
-  & li {
-    font-size: 14px;
+  & li,
+  & label {
+    font-size: 0.8rem;
     line-height: 150%;
   }
 
   & p {
     margin: 0.5rem 0;
+  }
+
+  & em {
+    font-size: 0.9rem;
   }
 `;
 
@@ -104,9 +117,8 @@ export function Rules() {
               </li>
               <li>
                 <em>Crazy 8s!</em>
-                <em> 8 </em> could be played regardless of
-                <em> top card's</em> value or suit; in addition, the next player
-                must play the suit destinated by current player
+                <em> 8 </em> could be played at anytime; in addition, the next
+                player must play the suit destinated by current player
               </li>
             </ul>
           </>
@@ -121,23 +133,22 @@ export function Rules() {
         </div>
         {showOptional && (
           <>
-            <ul>
-              <li>
-                <input type="checkbox" id="queenSkip"></input>
-                <label for="queenSkip">
-                  Queen skip: playing <em>Queen</em> skips next player's turn
-                </label>
-              </li>
-              <li>
-                {" "}
-                <input type="checkbox" id="drawTwo"></input>
-                <label for="drawTwo">
-                  Draw two: Playing <em>2</em> will cause the next player to
-                  draw 2 cards, the penalty can be stacked and passed on if a
-                  <em> 2 </em> is played dring your turn.
-                </label>
-              </li>
-            </ul>
+            <span>
+              <input type="checkbox" id="queenSkip"></input>
+              <label for="queenSkip">
+                Queen skip: playing <em>Queen</em> skips next player's turn
+              </label>
+            </span>
+
+            <span>
+              {" "}
+              <input type="checkbox" id="drawTwo"></input>
+              <label for="drawTwo">
+                Draw two: Playing <em>2</em> will cause the next player to draw
+                2 cards, the penalty can be stacked and passed on if a
+                <em> 2 </em> is played dring your turn.
+              </label>
+            </span>
           </>
         )}
       </div>

@@ -254,6 +254,7 @@ export function GameProvider({ children }) {
       p1wild.current = "8";
       p2wild.current = "8";
       let initialCount = 7;
+      setShowRules(false);
       dealToDiscard();
       dealToP1(initialCount);
       dealp2Ref(initialCount);
@@ -264,6 +265,7 @@ export function GameProvider({ children }) {
     }, 300);
   }
   function resetGame() {
+    setShowRules(false);
     setp2count(0);
     let p1 = structuredClone(p1Pile);
     let dis = structuredClone(discardPile);
