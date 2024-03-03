@@ -1,9 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 import { TriangleSVG } from "./TriangleSVG";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { motion } from "framer-motion";
 import { RuleSection } from "./RuleSection";
+import { GameContext } from "./GameProvider";
+import { buttonCss } from "./Top";
 const fontsCss = css`
   color: var(--off-white);
   & em {
@@ -27,12 +29,12 @@ export const sectionContainer = css`
   border-radius: 20px;
   padding: 2ch;
   margin-bottom: 0.75rem;
-  > span {
-    display: flex;
-    flex-direction: row;
+  & span {
+    display: grid;
+    grid-template-columns: 3rem auto;
     align-items: start;
     gap: 1ch;
-    margin-top: 1rem;
+    margin-top: 1.5rem;
   }
 
   > div {
@@ -71,13 +73,7 @@ export const sectionContainer = css`
 `;
 
 export function Rules() {
-  const [showSetup, setShowSetup] = useState(false);
-  const [showHow, setShowHow] = useState(false);
-  const [showOptional, setShowOptional] = useState(false);
-
-  const toggle = (setFn) => {
-    setFn((n) => !n);
-  };
+  const game = useContext(GameContext);
 
   const setupTitle = "Setup";
   const setupContent = (
@@ -113,18 +109,45 @@ export function Rules() {
     </>
   );
 
+  const handleQueenSkip = (e) => {
+    game.setQueenSkip((n) => !n);
+  };
+
+  const handleTwoDraw = (e) => {
+    game.setTwoDraw((n) => !n);
+  };
+
+  const switchCss = css`
+    ${buttonCss}
+  `;
+
+  const onCss = css`
+    background: var(--off-white);
+    color: var(--dark-bg);
+  `;
+
   const optionalTitle = "Optional Rules";
   const optionalContent = (
     <>
       <span>
-        <input type="checkbox" id="queenSkip"></input>
-        <label for="queenSkip">
+        <button
+          onClick={handleQueenSkip}
+          css={[switchCss, game.queenSkip && onCss]}
+        >
+          {(game.queenSkip && "On") || "Off"}
+        </button>
+        <label>
           Queen skip: playing <em>Queen</em> skips next player's turn
         </label>
       </span>
 
       <span>
-        <input type="checkbox" id="drawTwo"></input>
+        <button
+          onClick={handleTwoDraw}
+          css={[switchCss, game.twoDraw && onCss]}
+        >
+          {(game.twoDraw && "On") || "Off"}
+        </button>
         <label for="drawTwo">
           Draw two: Playing <em>2</em> will cause the next player to draw 2
           cards, the penalty can be stacked and passed on if a<em> 2 </em> is

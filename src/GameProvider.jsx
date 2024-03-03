@@ -32,6 +32,9 @@ export function GameProvider({ children }) {
   const [validCondition, setValidCondition] = useState({});
   const [showRules, setShowRules] = useState(false);
   const [winner, setWinner] = useState(null);
+  const [queenSkip, setQueenSkip] = useState(false);
+  const [twoDraw, setTwoDraw] = useState(false);
+
   // END STATES
 
   // REFS
@@ -43,6 +46,8 @@ export function GameProvider({ children }) {
   const p2Ref = useRef(null);
   const chosenCard = useRef(null);
   const solutionRef = useRef(null);
+  const queenSkipRef = useRef(null);
+  const twoDrawRef = useRef(null);
   // END REFS
 
   // useEffect hooks
@@ -50,6 +55,8 @@ export function GameProvider({ children }) {
   // initial load
   useEffect(() => {
     loadDeck(deckCountRef, setDeck);
+    queenSkipRef.current = false;
+    twoDrawRef.current = false;
   }, []);
 
   function setNum(n) {
@@ -490,6 +497,10 @@ export function GameProvider({ children }) {
     sortByRank,
     sortBySuit,
     winner,
+    queenSkip,
+    twoDraw,
+    setQueenSkip,
+    setTwoDraw,
   };
 
   return <GameContext.Provider value={game}>{children}</GameContext.Provider>;
