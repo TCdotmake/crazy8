@@ -32,7 +32,7 @@ export function GameProvider({ children }) {
   const [validCondition, setValidCondition] = useState({});
   const [showRules, setShowRules] = useState(false);
   const [winner, setWinner] = useState(null);
-  const [queenSkip, setQueenSkip] = useState(true);
+  const [queenSkip, setQueenSkip] = useState(false);
   const [twoDraw, setTwoDraw] = useState(false);
 
   // END STATES
@@ -48,6 +48,7 @@ export function GameProvider({ children }) {
   const solutionRef = useRef(null);
   const queenSkipRef = useRef(null);
   const twoDrawRef = useRef(null);
+  const penaltyRef = useRef(null);
   // END REFS
 
   // useEffect hooks
@@ -55,8 +56,7 @@ export function GameProvider({ children }) {
   // initial load
   useEffect(() => {
     loadDeck(deckCountRef, setDeck);
-    queenSkipRef.current = false;
-    twoDrawRef.current = false;
+    penaltyRef.current = 0;
   }, []);
 
   function setNum(n) {
@@ -157,6 +157,9 @@ export function GameProvider({ children }) {
             p2TurnAction();
           }, 700);
         } else {
+          if (twoDraw && card.value == "2") {
+            dealCards(2, p1setFn);
+          }
           updateValidCondition(nextTurn, card);
         }
         setPlayerTurn(true);
@@ -179,6 +182,7 @@ export function GameProvider({ children }) {
       p2Ref.current = [];
     }
     p2Ref.current = [...p2Ref.current, ...cards];
+    setp2count(p2Ref.length);
   }
 
   function p1setFn(drawnCards) {
@@ -263,6 +267,7 @@ export function GameProvider({ children }) {
   }
 
   function newGame() {
+    penaltyRef.current = 0;
     setTimeout(() => {
       p1wild.current = "8";
       p2wild.current = "8";
@@ -278,6 +283,7 @@ export function GameProvider({ children }) {
     }, 300);
   }
   function resetGame() {
+    penaltyRef.current = 0;
     setShowRules(false);
     setp2count(0);
     let p1 = structuredClone(p1Pile);
@@ -290,6 +296,9 @@ export function GameProvider({ children }) {
       ...p1,
       ...p2Ref.current,
     ]);
+    _.forEach(deckRef, (n) => {
+      n.wild = false;
+    });
     p2Ref.current = [];
     setWinner(null);
     setActive(false);
@@ -333,16 +342,27 @@ export function GameProvider({ children }) {
     if (result != FAILED) {
       chosenCard.current = card;
       let cardCount = p1Pile.length;
+
       if (cardCount == 1) {
         playCard(card);
         setWinner(1);
         setActive(false);
       } else if (result == WILD) {
         setp1choose(true);
-      } else {
+      } else if (queenSkip && card.value == "QUEEN") {
         playCard(card);
-        setPlayerTurn(false);
-        updateValidCondition(false, card);
+        updateValidCondition(true, card);
+      } else {
+        let timeout = 0;
+        playCard(card);
+        if (twoDraw && card.value == "2") {
+          dealp2Ref(2);
+          timeout = 300;
+        }
+        setTimeout(() => {
+          setPlayerTurn(false);
+          updateValidCondition(false, card);
+        }, timeout);
       }
     }
   }

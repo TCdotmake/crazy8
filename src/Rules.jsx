@@ -150,8 +150,7 @@ export function Rules() {
         </button>
         <label for="drawTwo">
           Draw two: Playing <em>2</em> will cause the next player to draw 2
-          cards, the penalty can be stacked and passed on if a<em> 2 </em> is
-          played dring your turn.
+          cards
         </label>
       </span>
     </>
