@@ -6,6 +6,22 @@ import { cardSizeCss } from "./P1section";
 import { absCenterCss } from "./Mid";
 import { AnimatePresence, delay, motion } from "framer-motion";
 
+function CardNote({ children }) {
+  return (
+    <div
+      css={[
+        absCenterCss,
+        css`
+          z-index: 300;
+          filter: drop-shadow(0 0 8px var(--dark-bg));
+        `,
+      ]}
+    >
+      {children}
+    </div>
+  );
+}
+
 const stickyCss = css`
   background: #fff8f0;
   width: 85px;
@@ -63,15 +79,7 @@ function getSuit(suit) {
     `;
   }
   return (
-    <div
-      css={[
-        absCenterCss,
-        css`
-          z-index: 300;
-          filter: drop-shadow(0 0 8px var(--dark-bg));
-        `,
-      ]}
-    >
+    <CardNote>
       <div
         css={[
           stickyCss,
@@ -84,9 +92,64 @@ function getSuit(suit) {
         <h3>Crazy 8!</h3>
         <p>{result}</p>
       </div>
-    </div>
+    </CardNote>
   );
 }
+
+const skip = (
+  <CardNote>
+    <div
+      css={css`
+        padding: 2px;
+        border: 2px solid var(--light-red);
+        border-radius: 9px;
+        rotate: 4deg;
+      `}
+    >
+      <div
+        css={css`
+          background: var(--light-red);
+          color: white;
+          width: 7ch;
+          text-align: center;
+          font-size: 1.2rem;
+          padding: 5px;
+          border-radius: 5px;
+        `}
+      >
+        Q Skip!!
+      </div>
+    </div>
+  </CardNote>
+);
+
+const draw = (
+  <CardNote>
+    <div
+      css={css`
+        padding: 2px;
+        border: 2px solid var(--dark-bg);
+        border-radius: 9px;
+        background: Silver;
+        rotate: 4deg;
+      `}
+    >
+      <div
+        css={css`
+          background: var(--dark-bg);
+          color: white;
+          width: 9ch;
+          text-align: center;
+          font-size: 1rem;
+          padding: 10px;
+          border-radius: 5px;
+        `}
+      >
+        Draw 2!!
+      </div>
+    </div>
+  </CardNote>
+);
 
 export function Discards() {
   const game = useContext(GameContext);
@@ -150,6 +213,8 @@ export function Discards() {
                   ></img>
 
                   {card.wild && getSuit(game.validCondition.suit)}
+                  {game.isSkip(card) && skip}
+                  {game.isDraw(card) && draw}
                 </div>
               </motion.div>
             );

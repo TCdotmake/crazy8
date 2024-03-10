@@ -81,7 +81,6 @@ export function P1section() {
               ${buttonCss}
             }
             > button {
-              width: 48px;
             }
           `}
         >

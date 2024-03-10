@@ -32,8 +32,8 @@ export function GameProvider({ children }) {
   const [validCondition, setValidCondition] = useState({});
   const [showRules, setShowRules] = useState(false);
   const [winner, setWinner] = useState(null);
-  const [queenSkip, setQueenSkip] = useState(false);
-  const [twoDraw, setTwoDraw] = useState(false);
+  const [queenSkip, setQueenSkip] = useState(true);
+  const [twoDraw, setTwoDraw] = useState(true);
 
   // END STATES
 
@@ -255,6 +255,8 @@ export function GameProvider({ children }) {
     //get the first card
     const card = structuredClone(deckRef.current[0]);
     card.wild = false;
+    card.skip = false;
+    card.draw = false;
     //set conditions
 
     updateValidCondition(true, card);
@@ -325,6 +327,7 @@ export function GameProvider({ children }) {
     if (index != -1) {
       let copy = structuredClone(p1Pile);
       let card = copy.splice(index, 1)[0];
+      card.byPlayer = true;
       if (card.value == validCondition.wild) {
         card.wild = true;
       } else {
@@ -372,6 +375,7 @@ export function GameProvider({ children }) {
     if (index != -1) {
       let copy = p2Ref.current;
       let card = copy.splice(index, 1)[0];
+      card.byPlayer = true;
       if (card.value == validCondition.wild) {
         card.wild = true;
       } else {
@@ -497,6 +501,20 @@ export function GameProvider({ children }) {
     }
   }
 
+  function isDraw(card) {
+    if (card.value == "2" && twoDraw && card.byPlayer) {
+      return true;
+    }
+    return false;
+  }
+
+  function isSkip(card) {
+    if (card.value == "QUEEN" && queenSkip && card.byPlayer) {
+      return true;
+    }
+    return false;
+  }
+
   // Context variables
   const game = {
     loaded,
@@ -527,6 +545,8 @@ export function GameProvider({ children }) {
     twoDraw,
     setQueenSkip,
     setTwoDraw,
+    isDraw,
+    isSkip,
   };
 
   return <GameContext.Provider value={game}>{children}</GameContext.Provider>;
