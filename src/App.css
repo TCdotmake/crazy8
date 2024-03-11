@@ -22,6 +22,7 @@
   --off-white-trans: #f4fff8b6;
   --light-red: #ff7261;
   --glow-color: rgb(255, 13, 0);
+  --card-l-margin: -80px;
 }
 
 body {

@@ -37,7 +37,9 @@ const staggerMotion = {
 };
 
 export function P1section() {
-  const ARRSIZE = 7;
+  const ARRSIZE = 5;
+  const cardWidth = 110;
+  const cardMargin = -80;
   const game = useContext(GameContext);
   const pile = game.p1Pile;
 
@@ -99,16 +101,16 @@ export function P1section() {
       {pile.length > 0 && (
         <div
           css={css`
-            width: 290px;
+            width: ${(cardWidth + cardMargin) * (ARRSIZE - 1) + cardWidth}px;
             > *:first-child,
-            > *:nth-child(7n + 1) {
+            > *:nth-child(${ARRSIZE}n + 1) {
               margin-left: 0;
             }
-            > *:nth-child(n + 8) {
+            > *:nth-child(n + ${ARRSIZE + 1}) {
               margin-top: -120px;
             }
             > * {
-              margin-left: -80px;
+              margin-left: var(--card-l-margin);
             }
           `}
         >
@@ -125,6 +127,9 @@ export function P1section() {
                   onClick={handlePlay}
                   key={n.key + "btn"}
                   data-key={n.key}
+                  css={css`
+                    filter: drop-shadow(-3px 3px 5px var(--dark-bg));
+                  `}
                 >
                   <img
                     css={cardSizeCss}

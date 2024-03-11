@@ -24,11 +24,16 @@ const navBarCss = css`
   width: 298px;
   justify-content: flex-start;
   gap: 1ch;
-  & button {
+  & button,
+  & a {
     ${buttonCss}
   }
   & button:nth-child(2) {
     margin-left: auto;
+  }
+
+  & a {
+    text-decoration: none;
   }
 `;
 
@@ -63,7 +68,9 @@ export function Top() {
         >
           Rules
         </button>
-        <button>GitHub</button>
+        <a href="https://github.com/TCdotmake/crazy8" target="_blank">
+          GitHub
+        </a>
       </div>{" "}
     </div>
   );
