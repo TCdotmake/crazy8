@@ -24,39 +24,45 @@ const suitsCss = css`
 function App() {
   return (
     <GameProvider>
-      <header
+      <div
         css={css`
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          margin: 3.5rem auto 2rem auto;
+          min-height: 620px;
         `}
       >
-        <h1 css={headerFont} className="julius-sans">
-          Crazy{" "}
-          <span
-            css={css`
-              color: var(--light-red);
-              font-size: 4.5rem;
-            `}
-          >
-            8
-          </span>
-          S
-        </h1>
-      </header>
+        <header
+          css={css`
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 3.5rem auto 2rem auto;
+          `}
+        >
+          <h1 css={headerFont} className="julius-sans">
+            Crazy{" "}
+            <span
+              css={css`
+                color: var(--light-red);
+                font-size: 4.5rem;
+              `}
+            >
+              8
+            </span>
+            S
+          </h1>
+        </header>
 
-      <main
-        css={css`
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-        `}
-      >
-        <Top></Top>
-        <Mid></Mid>
-      </main>
+        <main
+          css={css`
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+          `}
+        >
+          <Top></Top>
+          <Mid></Mid>
+        </main>
+      </div>
     </GameProvider>
   );
 }

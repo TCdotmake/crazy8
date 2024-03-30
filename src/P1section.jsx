@@ -37,7 +37,7 @@ const staggerMotion = {
 };
 
 export function P1section() {
-  const ARRSIZE = 5;
+  const ARRSIZE = 7;
   const cardWidth = 110;
   const cardMargin = -80;
   const game = useContext(GameContext);
