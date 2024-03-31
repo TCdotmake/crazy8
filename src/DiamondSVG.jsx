@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 
-export function HeartSVG() {
+export function DiamondSVG() {
   return (
     <svg
       width="39px"
@@ -21,7 +21,7 @@ export function HeartSVG() {
       <g id="SVGRepo_iconCarrier" transform="scale(0.45)">
         <path
           fill="#feffff"
-          d="M2.067 11.319C2.067 2.521 14.251-.74 18 9.445C21.749-.741 33.933 2.52 33.933 11.319C33.933 20.879 18 33 18 33S2.067 20.879 2.067 11.319z"
+          d="M18.437 35.747c-.242.337-.632.337-.874 0L5.314 18.612c-.242-.338-.242-.886 0-1.224L17.563.253c.242-.338.632-.338.874 0l12.25 17.135c.241.338.241.886 0 1.224l-12.25 17.135z"
         />
       </g>
     </svg>

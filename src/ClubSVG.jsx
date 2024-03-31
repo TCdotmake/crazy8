@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 
-export function HeartSVG() {
+export function ClubSVG() {
   return (
     <svg
       width="39px"
@@ -21,7 +21,7 @@ export function HeartSVG() {
       <g id="SVGRepo_iconCarrier" transform="scale(0.45)">
         <path
           fill="#feffff"
-          d="M2.067 11.319C2.067 2.521 14.251-.74 18 9.445C21.749-.741 33.933 2.52 33.933 11.319C33.933 20.879 18 33 18 33S2.067 20.879 2.067 11.319z"
+          d="M25.5 28a7.5 7.5 0 0 0 7.5-7.5a7.5 7.5 0 0 0-7.5-7.5a7.45 7.45 0 0 0-3.73 1h-.21a6.972 6.972 0 0 0 3.423-6a6.983 6.983 0 1 0-13.967 0a6.972 6.972 0 0 0 3.423 6h-.208c-1.1-.633-2.371-1-3.731-1a7.5 7.5 0 0 0 0 15a7.476 7.476 0 0 0 5.46-2.368C15.549 29.753 11.205 33 7 33h.5a1.5 1.5 0 1 0 0 3h21a1.5 1.5 0 0 0 0-3h.5c-4.205 0-8.549-3.248-8.959-7.369A7.47 7.47 0 0 0 25.5 28z"
         />
       </g>
     </svg>
