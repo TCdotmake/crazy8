@@ -5,6 +5,7 @@ import { css } from "@emotion/react";
 import { cardSizeCss } from "./P1section";
 import { absCenterCss } from "./Mid";
 import { AnimatePresence, delay, motion } from "framer-motion";
+import { HeartSVG } from "./HeartSVG";
 
 function CardNote({ children }) {
   return (
@@ -49,7 +50,7 @@ const stickyCss = css`
     font-family: "Lato", sans-serif;
     font-weight: 300;
     font-style: normal;
-    font-size: 0.8rem;
+    font-size: 0.9rem;
   }
   > p {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
@@ -60,19 +61,19 @@ const stickyCss = css`
 `;
 
 function getSuit(suit) {
-  let result = "♥";
+  let imgSource = "src/heart.svg";
   if (suit == SPADES) {
-    result = "♠";
+    imgSource = "src/spade.svg";
   } else if (suit == DIAMONDS) {
-    result = "♦";
+    imgSource = "src/diamond.svg";
   } else if (suit == CLUBS) {
-    result = "♣";
+    imgSource = "src/club.svg";
   }
   let color = css`
-    color: var(--off-white);
+    color: white;
     background: var(--dark-bg);
   `;
-  if (result == "♦" || result == "♥") {
+  if (imgSource == "src/diamond.svg" || imgSource == "src/heart.svg") {
     color = css`
       color: white;
       background: var(--light-red);
@@ -90,7 +91,13 @@ function getSuit(suit) {
         ]}
       >
         <h3>Crazy 8!</h3>
-        <p>{result}</p>
+        <img
+          src={imgSource}
+          css={css`
+            width: 30px;
+            border: none;
+          `}
+        ></img>
       </div>
     </CardNote>
   );
