@@ -5,8 +5,7 @@ import { css } from "@emotion/react";
 import { cardSizeCss } from "./P1section";
 import { absCenterCss } from "./Mid";
 import { AnimatePresence, delay, motion } from "framer-motion";
-import { HeartSVG } from "./HeartSVG";
-
+import heartSVG from "./svg/heart.svg";
 function CardNote({ children }) {
   return (
     <div
@@ -60,20 +59,25 @@ const stickyCss = css`
   }
 `;
 
+let heart = "src/svg/club.svg";
+let spade = heart;
+let diamond = heart;
+let club = heart;
+
 function getSuit(suit) {
-  let imgSource = "src/heart.svg";
+  let imgSource = heart;
   if (suit == SPADES) {
-    imgSource = "src/spade.svg";
+    imgSource = spade;
   } else if (suit == DIAMONDS) {
-    imgSource = "src/diamond.svg";
+    imgSource = diamond;
   } else if (suit == CLUBS) {
-    imgSource = "src/club.svg";
+    imgSource = club;
   }
   let color = css`
     color: white;
     background: var(--dark-bg);
   `;
-  if (imgSource == "src/diamond.svg" || imgSource == "src/heart.svg") {
+  if (imgSource == diamond || imgSource == heart) {
     color = css`
       color: white;
       background: var(--light-red);
@@ -91,13 +95,7 @@ function getSuit(suit) {
         ]}
       >
         <h3>Crazy 8!</h3>
-        <img
-          src={imgSource}
-          css={css`
-            width: 30px;
-            border: none;
-          `}
-        ></img>
+        {heartSVG}
       </div>
     </CardNote>
   );
@@ -219,7 +217,7 @@ export function Discards() {
                     ]}
                   ></img>
 
-                  {card.wild && getSuit(game.validCondition.suit)}
+                  {getSuit(game.validCondition.suit)}
                   {game.isSkip(card) && skip}
                   {game.isDraw(card) && draw}
                 </div>
